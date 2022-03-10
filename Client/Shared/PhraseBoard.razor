@@ -1,0 +1,23 @@
+﻿@using Phrazy.Client.Services
+@inject IGameEngine _gameEngine;
+
+@foreach (var letter in _letters)
+{
+    if (letter == ' ')
+    {
+        <div class="letterSpacer"> </div>
+    }
+    else
+    {
+        <PhraseLetter Letter="letter"></PhraseLetter>
+    }
+}
+
+@code {
+    private List<char> _letters;
+    protected override Task OnInitializedAsync()
+    {
+        _letters = "this is a test".ToCharArray().ToList();
+        return base.OnInitializedAsync();
+    }
+}
