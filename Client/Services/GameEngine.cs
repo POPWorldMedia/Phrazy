@@ -23,7 +23,7 @@ namespace Phrazy.Client.Services
 
         public List<List<PhraseLetterStateBox>> Start()
         {
-            Phrase = "too cool for elementary school";
+            Phrase = "too cool for bitchin' elementary school";
             KeyStates = new Dictionary<string, KeyState>();
             var alphabet = "abcdefghijklmnopqrstuvwxyz";
             var array = alphabet.ToCharArray();
@@ -39,8 +39,9 @@ namespace Phrazy.Client.Services
                 var chars = word.ToCharArray();
                 foreach (var character in chars)
                 {
+                    var initialState = array.Contains(character) ? PhraseLetterState.NotGuessed : PhraseLetterState.Special;
                     var stateBox = new PhraseLetterStateBox
-                        {Letter = character.ToString(), PhraseLetterState = PhraseLetterState.NotGuessed};
+                        {Letter = character.ToString(), PhraseLetterState = initialState};
                     PhraseLetterStateBoxes.Add(stateBox);
                     wordOfStateBoxes.Add(stateBox);
                 }

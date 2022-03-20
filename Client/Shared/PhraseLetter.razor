@@ -3,7 +3,7 @@
 @inject IGameEngine _gameEngine
 
 <div class="letter @PhraseLetterStateBox.PhraseLetterState">
-    @if (PhraseLetterStateBox.PhraseLetterState == PhraseLetterState.Guessed)
+    @if (PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special)
     {
         @PhraseLetterStateBox.Letter
     }
