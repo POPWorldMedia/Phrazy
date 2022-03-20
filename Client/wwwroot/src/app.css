@@ -1,41 +1,64 @@
-﻿.word, .word > div {
-    display: inline-block;
+﻿html, body, #app {
+    height: 100%;
 }
 
 .word > div {
-    font-size: 1.5em; font-weight: bold;
-    text-align: center;
-    border: .2em solid black;
+    display: inline-flex;
+    font-size: 1.5em;
+    font-weight: bold;
+    border: .1em solid black;
     padding: .5em;
     width: 1.5em;
     text-transform: capitalize;
     margin-right: .2em;
+    justify-content: center;
+    align-items: center;
 }
 
 .word {
-    margin-right: 1em;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-right: 2.6em;
     margin-bottom: 1em;
 }
 
 #gameContainer {
     display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 #phraseBoard {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-content: flex-start;
+    flex-flow: row wrap;
+    height: 100%;
+    max-width: 800px;
+    padding: 1em;
 }
 
 #keyboard {
     width: 100%;
     max-width: 500px;
-    margin: 0 auto;
+    margin: 1em auto;
 }
-
+.keyboardRow {
+    display: flex;
+    justify-content: center;
+}
 .key {
-    display: inline-block;
     cursor: pointer;
+    text-transform: capitalize;
+    font-size: 1.5em;
+    width: 1.5em;
+    height: 2.5em;
+    color: white;
+    background-color: green;
+    border-radius: .2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: .1em;
 }
 
 
