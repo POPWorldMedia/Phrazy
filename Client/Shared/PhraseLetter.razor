@@ -1,8 +1,13 @@
-﻿<div>
+﻿<div class="letter">
     @Letter
 </div>
 
 @code {
     [Parameter]
     public char Letter { get; set; }
+
+    protected override void OnParametersSet()
+    {
+    }
+
 }

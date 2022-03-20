@@ -1,23 +1,19 @@
 ﻿@using Phrazy.Client.Services
 @inject IGameEngine _gameEngine;
 
-@foreach (var letter in _letters)
-{
-    if (letter == ' ')
+<div id="phraseBoard">
+    @foreach (var word in _words)
     {
-        <div class="letterSpacer"> </div>
+        <PhraseWord Word="@word"></PhraseWord>
     }
-    else
-    {
-        <PhraseLetter Letter="letter"></PhraseLetter>
-    }
-}
+</div>
 
 @code {
-    private List<char> _letters;
+    private List<string> _words;
+
     protected override Task OnInitializedAsync()
     {
-        _letters = "this is a test".ToCharArray().ToList();
+        _words = "too cool for elementary school".Split(' ').ToList();
         return base.OnInitializedAsync();
     }
 }

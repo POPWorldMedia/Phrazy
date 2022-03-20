@@ -1,4 +1,44 @@
-﻿
+﻿.word, .word > div {
+    display: inline-block;
+}
+
+.word > div {
+    font-size: 1.5em; font-weight: bold;
+    text-align: center;
+    border: .2em solid black;
+    padding: .5em;
+    width: 1.5em;
+    text-transform: capitalize;
+    margin-right: .2em;
+}
+
+.word {
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
+#gameContainer {
+    display: flex;
+}
+
+#phraseBoard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#keyboard {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.key {
+    display: inline-block;
+    cursor: pointer;
+}
+
+
 
 #blazor-error-ui {
     background: lightyellow;

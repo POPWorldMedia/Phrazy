@@ -1,0 +1,23 @@
+﻿<div class="word">
+    @foreach (var letter in _letters)
+    {
+        <PhraseLetter Letter="letter"></PhraseLetter>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Word { get; set; }
+
+    private char[] _letters;
+
+    public PhraseWord()
+    {
+        _letters = null!;
+    }
+
+    protected override void OnParametersSet()
+    {
+        _letters = Word.ToCharArray();
+    }
+}
