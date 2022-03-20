@@ -3,12 +3,17 @@
 @inject IGameEngine _gameEngine
 
 <div class="letter @PhraseLetterStateBox.PhraseLetterState">
-    @PhraseLetterStateBox.Letter
+    @if (PhraseLetterStateBox.PhraseLetterState == PhraseLetterState.Guessed)
+    {
+        @PhraseLetterStateBox.Letter
+    }
 </div>
 
 @code {
     [Parameter]
-    public PhraseLetterStateBox PhraseLetterStateBox { get; set; }
+    public PhraseLetterStateBox PhraseLetterStateBox { get; set; } = null!;
+
+    private string _letter = string.Empty;
 
     protected override void OnInitialized()
     {

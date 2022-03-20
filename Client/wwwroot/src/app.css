@@ -8,16 +8,17 @@
     font-weight: bold;
     border: .05em solid black;
     padding: .5em;
-    width: 1.5em;
+    width: 1.5em; height: 2.5em;
     text-transform: capitalize;
     margin-right: .2em;
     justify-content: center;
     align-items: center;
 }
 
-.letter.Guessed {
+.letter.Guessed, .letter.Special {
     color: white;
     background-color: green;
+    border: none;
 }
 
 .word {

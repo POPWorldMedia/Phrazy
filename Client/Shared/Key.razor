@@ -2,11 +2,11 @@
 @using Phrazy.Client.Models
 @inject IGameEngine _gameEngine
 
-<button class="key @_gameEngine.KeyStates[Letter]" @onclick="Click">@Letter</button>
+<button class="key @_gameEngine.KeyStates![Letter]" @onclick="Click">@Letter</button>
 
 @code {
     [Parameter]
-    public string Letter { get; set; }
+    public string Letter { get; set; } = null!;
 
     protected override void OnInitialized()
     {

@@ -8,14 +8,7 @@
 
 @code {
     [Parameter]
-    public List<PhraseLetterStateBox> Word { get; set; }
-
-    private char[] _letters;
-
-    public PhraseWord()
-    {
-        _letters = null!;
-    }
+    public List<PhraseLetterStateBox> Word { get; set; } = null!;
 
     protected override void OnParametersSet()
     {
