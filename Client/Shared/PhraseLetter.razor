@@ -1,13 +1,17 @@
-﻿<div class="letter">
-    @Letter
+﻿@using Phrazy.Client.Models
+@using Phrazy.Client.Services
+@inject IGameEngine _gameEngine
+
+<div class="letter @PhraseLetterStateBox.PhraseLetterState">
+    @PhraseLetterStateBox.Letter
 </div>
 
 @code {
     [Parameter]
-    public char Letter { get; set; }
+    public PhraseLetterStateBox PhraseLetterStateBox { get; set; }
 
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
+        _gameEngine.OnKeyPress += StateHasChanged;
     }
-
 }

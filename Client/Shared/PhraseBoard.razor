@@ -1,4 +1,5 @@
 ﻿@using Phrazy.Client.Services
+@using Phrazy.Client.Models
 @inject IGameEngine _gameEngine;
 
 <div id="phraseBoard">
@@ -9,11 +10,11 @@
 </div>
 
 @code {
-    private List<string> _words;
+    private List<List<PhraseLetterStateBox>> _words;
 
     protected override Task OnInitializedAsync()
     {
-        _words = "too cool for elementary school".Split(' ').ToList();
+        _words = _gameEngine.Start();
         return base.OnInitializedAsync();
     }
 }

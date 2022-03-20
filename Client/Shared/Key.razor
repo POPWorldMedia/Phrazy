@@ -1,6 +1,25 @@
-﻿<div class="key">@Letter</div>
+﻿@using Phrazy.Client.Services
+@using Phrazy.Client.Models
+@inject IGameEngine _gameEngine
+
+<button class="key @_gameEngine.KeyStates[Letter]" @onclick="Click">@Letter</button>
 
 @code {
     [Parameter]
     public string Letter { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _gameEngine.OnKeyPress += StateHasChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+    }
+
+    private void Click()
+    {
+        _gameEngine.ChooseLetter(Letter);
+    }
+
 }

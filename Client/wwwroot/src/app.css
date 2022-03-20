@@ -6,13 +6,18 @@
     display: inline-flex;
     font-size: 1.5em;
     font-weight: bold;
-    border: .1em solid black;
+    border: .05em solid black;
     padding: .5em;
     width: 1.5em;
     text-transform: capitalize;
     margin-right: .2em;
     justify-content: center;
     align-items: center;
+}
+
+.letter.Guessed {
+    color: white;
+    background-color: green;
 }
 
 .word {
@@ -55,12 +60,17 @@
     color: white;
     background-color: green;
     border-radius: .2em;
+    border: none;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: .1em;
 }
-
+.key.Chosen {
+    background-color: darkgray;
+    color: black;
+    cursor: default;
+}
 
 
 #blazor-error-ui {

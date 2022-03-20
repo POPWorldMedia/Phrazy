@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Phrazy.Client.Services
+@inject IGameEngine _gameEngine
 
 <PageTitle>Phrazy</PageTitle>
 
@@ -10,9 +12,9 @@
 
 @code {
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-
+        _gameEngine.Start();
     }
 
 }
