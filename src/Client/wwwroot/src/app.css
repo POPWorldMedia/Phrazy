@@ -29,20 +29,21 @@ header div {
 
 .letter {
     display: inline-flex;
-    width: 1.5em; height: 2em;
+    width: 2em;
+    height: 2.5em;
     margin-right: .2em;
 }
 
 .letterContainer {
-    width: 1.5em;
-    height: 2em;
+    height: 100%; width: 100%;
     transform-style: preserve-3d;
     transition: transform 0.3s;
 }
 
 .letterContainer > div {
-    width: 1.5em; height: 2em;
-    padding: .5em;
+    font-size: 1.5em;
+    display: flex;
+    height: 100%; width: 100%;
     position: absolute;
     backface-visibility: hidden;
     background-color: #777;
@@ -51,7 +52,6 @@ header div {
 .letterContainer > .Guessed, .letterContainer > .Special {
     color: white;
     background-color: green;
-    font-size: 1.5em;
     font-weight: bold;
     text-transform: capitalize;
     justify-content: center;

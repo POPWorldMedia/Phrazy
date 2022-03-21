@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phrazy.Server", "Server\Phrazy.Server.csproj", "{D5DE5181-9103-4CBE-9183-DDD7A01AA054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phrazy.Server", "src\Server\Phrazy.Server.csproj", "{D5DE5181-9103-4CBE-9183-DDD7A01AA054}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phrazy.Client", "Client\Phrazy.Client.csproj", "{29F666F5-929A-428C-ACA5-71B6CA05BF7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phrazy.Client", "src\Client\Phrazy.Client.csproj", "{29F666F5-929A-428C-ACA5-71B6CA05BF7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phrazy.Shared", "Shared\Phrazy.Shared.csproj", "{2764FEF1-BA0C-4905-9EAA-11EDD7C179ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phrazy.Shared", "src\Shared\Phrazy.Shared.csproj", "{2764FEF1-BA0C-4905-9EAA-11EDD7C179ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7EAE9C8-65C1-439B-BAF8-AD24601F5566}"
 	ProjectSection(SolutionItems) = preProject
