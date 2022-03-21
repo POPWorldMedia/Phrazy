@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 
-Client/wwwroot/lib
+src/Client/wwwroot/lib

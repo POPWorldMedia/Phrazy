@@ -103,18 +103,18 @@ header div {
     font-size: 1.5em;
     width: 1.5em;
     height: 2.5em;
-    color: white;
-    background-color: green;
     border-radius: .2em;
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: .1em;
-}
-.key.Chosen {
     background-color: darkgray;
     color: black;
+}
+.key.Chosen {
+    color: white;
+    background-color: green;
     cursor: default;
 }
 
