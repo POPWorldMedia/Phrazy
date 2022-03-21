@@ -103,7 +103,6 @@ header div {
     cursor: pointer;
     text-transform: capitalize;
     font-size: 1.5em;
-    width: 1.5em;
     height: 2.5em;
     border-radius: .2em;
     border: none;
@@ -127,6 +126,7 @@ header div {
 }
 .halfKey {
     flex: 0.5;
+    margin: .1em;
 }
 
 
