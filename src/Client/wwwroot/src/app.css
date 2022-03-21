@@ -84,7 +84,7 @@ header div {
     flex-flow: row wrap;
     height: 100%;
     max-width: 800px;
-    padding: 1em 1em 0 1em;
+    padding: 1em 0 0 2.2em;
     margin: 0 auto;
 }
 
@@ -104,6 +104,7 @@ header div {
     text-transform: capitalize;
     font-size: 1.5em;
     height: 2.5em;
+    padding: 0;
     border-radius: .2em;
     border: none;
     display: flex;
