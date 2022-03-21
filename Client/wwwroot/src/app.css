@@ -59,7 +59,7 @@ header div {
 
 #phraseBoard {
     display: flex;
-    align-content: flex-start;
+    align-content: center;
     flex-flow: row wrap;
     height: 100%;
     max-width: 800px;
