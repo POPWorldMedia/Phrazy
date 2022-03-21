@@ -25,24 +25,45 @@ header div {
     text-align: center;
 }
 
+
+
 .letter {
     display: inline-flex;
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: .5em;
     width: 1.5em; height: 2em;
-    text-transform: capitalize;
     margin-right: .2em;
-    justify-content: center;
-    align-items: center;
+}
+
+.letterContainer {
+    width: 1.5em;
+    height: 2em;
+    transform-style: preserve-3d;
+    transition: transform 0.3s;
+}
+
+.letterContainer > div {
+    width: 1.5em; height: 2em;
+    padding: .5em;
+    position: absolute;
+    backface-visibility: hidden;
     background-color: #777;
 }
 
-.letter.Guessed, .letter.Special {
+.letterContainer > .Guessed, .letterContainer > .Special {
     color: white;
     background-color: green;
-    border: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: capitalize;
+    justify-content: center;
+    align-items: center;
+    transform: rotateY(180deg);
 }
+
+.flipped {
+    transform: rotateY(-180deg);
+}
+
+
 
 .word {
     display: flex;
