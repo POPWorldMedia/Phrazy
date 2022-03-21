@@ -12,7 +12,7 @@
 <div class="letter">
     <div class="letterContainer @(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special ? "flipped" : "")">
         <div></div>
-        <div class="Guessed">@PhraseLetterStateBox.Letter</div>
+        <div class="Guessed">@(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special ? PhraseLetterStateBox.Letter : "")</div>
     </div>
 </div>
 
