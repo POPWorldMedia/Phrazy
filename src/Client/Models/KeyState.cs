@@ -3,5 +3,6 @@
 public enum KeyState
 {
     NotChosen,
-    Chosen
+    Hit,
+    Miss
 }

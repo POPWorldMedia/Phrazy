@@ -112,9 +112,14 @@ header div {
     background-color: darkgray;
     color: black;
 }
-.key.Chosen {
+.key.Hit {
     color: white;
     background-color: green;
+    cursor: default;
+}
+.key.Miss {
+    color: white;
+    background-color: darkred;
     cursor: default;
 }
 
