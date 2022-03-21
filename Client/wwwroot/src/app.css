@@ -2,17 +2,40 @@
     height: 100%;
 }
 
-.word > div {
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #222;
+        color: white;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        background: white;
+        color: black;
+    }
+}
+
+header {
+    border-bottom: solid .05em;
+}
+header div {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.letter {
     display: inline-flex;
     font-size: 1.5em;
     font-weight: bold;
-    border: .05em solid black;
     padding: .5em;
-    width: 1.5em; height: 2.5em;
+    width: 1.5em; height: 2em;
     text-transform: capitalize;
     margin-right: .2em;
     justify-content: center;
     align-items: center;
+    background-color: #777;
 }
 
 .letter.Guessed, .letter.Special {
@@ -40,7 +63,8 @@
     flex-flow: row wrap;
     height: 100%;
     max-width: 800px;
-    padding: 1em;
+    padding: 1em 1em 0 1em;
+    margin: 0 auto;
 }
 
 #keyboard {
