@@ -89,6 +89,8 @@ header div {
 }
 
 #keyboard {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 500px;
     margin: 1em auto;
@@ -106,6 +108,7 @@ header div {
     border-radius: .2em;
     border: none;
     display: flex;
+    flex: 1;
     justify-content: center;
     align-items: center;
     margin: .1em;
@@ -121,6 +124,9 @@ header div {
     color: white;
     background-color: darkred;
     cursor: default;
+}
+.halfKey {
+    flex: 0.5;
 }
 
 
