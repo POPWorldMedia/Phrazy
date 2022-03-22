@@ -84,9 +84,50 @@ header div {
     flex-flow: row wrap;
     height: 100%;
     max-width: 800px;
-    padding: 1em 0 0 2.2em;
+    padding: 1em 0 1em 2.2em;
     margin: 0 auto;
 }
+
+
+
+#scoreTrail {
+    display: flex;
+    max-width: 500px;
+    margin: 0 auto;
+    height: calc(calc(500px/26) - 4px);
+}
+
+#scoreTrail > .scoreBox {
+    display: flex;
+    height: calc(calc(500px/26) - 4px);
+    width: 3vw;
+    margin-right: 4px;
+    flex: 1;
+}
+
+.scoreBox > .scoreIndicator {
+    height: 100%;
+    width: 100%;
+}
+.scoreIndicator.guessCorrect {
+    background-color: green;
+}
+.scoreIndicator.guessWrong {
+    background-color: darkred;
+}
+.scoreIndicator.explode {
+    transform: scale(0,0) rotate(-90deg);
+    animation: explode 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes explode {
+    100% {
+        transform: scale(1,1) rotate(0deg);
+    }
+}
+
+
 
 #keyboard {
     display: flex;
