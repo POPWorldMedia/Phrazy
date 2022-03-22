@@ -60,8 +60,8 @@ namespace Phrazy.Client.Services
 
         public void ChooseLetter(string letter)
         {
-            if (KeyStates![letter] == KeyState.NotChosen)
-                KeyStates[letter] = KeyState.Hit;
+            if (KeyStates![letter] != KeyState.NotChosen)
+                return;
 
             var hit = false;
             foreach (var stateBox in PhraseLetterStateBoxes!)

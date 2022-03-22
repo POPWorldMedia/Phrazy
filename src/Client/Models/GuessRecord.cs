@@ -3,5 +3,5 @@
 public class GuessRecord
 {
     public bool IsCorrect { get; set; }
-    public string Letter { get; set; }
+    public string? Letter { get; set; }
 }

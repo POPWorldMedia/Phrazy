@@ -1,10 +1,12 @@
 ﻿@page "/"
 @using Phrazy.Client.Services
+@using System.Text.RegularExpressions
 @inject IGameEngine _gameEngine
+@inject IJSRuntime _jsRuntime
 
 <PageTitle>Phonical</PageTitle>
 
-<div id="gameContainer">
+<div id="gameContainer" tabindex="0" @onkeydown="HandleKey">
     <header>
         <div>Codename: Phonical</div>
     </header>
@@ -20,6 +22,20 @@
     protected override void OnInitialized()
     {
         _gameEngine.Start();
+    }
+
+    private void HandleKey(KeyboardEventArgs e)
+    {
+        if (Regex.IsMatch(e.Key, "^[a-zA-Z]{1}$"))
+        {
+            _gameEngine.ChooseLetter(e.Key.ToLower());
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await _jsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
     }
 
 }

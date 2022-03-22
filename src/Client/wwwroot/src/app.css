@@ -41,6 +41,7 @@ header div {
 }
 
 .letterContainer > div {
+    user-select: none;
     font-size: 1.5em;
     display: flex;
     height: 100%; width: 100%;
@@ -142,6 +143,7 @@ header div {
     justify-content: center;
 }
 .key {
+    user-select: none;
     cursor: pointer;
     text-transform: capitalize;
     font-size: 1.5em;
