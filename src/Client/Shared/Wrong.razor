@@ -1,0 +1,31 @@
+﻿@using Phrazy.Client.Services
+@inject IGameEngine _gameEngine
+
+<div id="wrong" class="@_flashClass">
+    <div>WRONG</div>
+</div>
+
+@code {
+    private string _flashClass = string.Empty;
+    private System.Timers.Timer timer = null!;
+
+    protected override void OnInitialized()
+    {
+        _gameEngine.OnWrongSolve += Flash;
+    }
+
+    private void Flash()
+    {
+        _flashClass = string.Empty;
+        _flashClass = "flash";
+        StateHasChanged();
+        timer = new System.Timers.Timer(2100);
+        timer.Elapsed += (sender, args) =>
+        {
+            _flashClass = string.Empty;
+            StateHasChanged();
+            timer.Enabled = false;
+        };
+        timer.Enabled = true;
+    }
+}

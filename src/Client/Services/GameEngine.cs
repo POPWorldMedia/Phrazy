@@ -1,17 +1,20 @@
-﻿using Phrazy.Client.Models;
+﻿using System.Text;
+using Phrazy.Client.Models;
 
 namespace Phrazy.Client.Services
 {
     public interface IGameEngine
     {
+        event Action OnKeyPress;
+        event Action? OnSolveModeChange;
+        event Action? OnWrongSolve;
+
         string? Phrase { get; }
         Dictionary<string, KeyState>? KeyStates { get; }
         List<GuessRecord>? GuessRecords { get; }
         bool IsSolveMode { get; }
         void ChooseLetter(string letter);
         List<List<PhraseLetterStateBox>> Start();
-        event Action OnKeyPress;
-        event Action? OnSolveModeChange;
         void ToggleSolveMode();
         void SolveBackspace();
     }
@@ -20,6 +23,7 @@ namespace Phrazy.Client.Services
     {
         public event Action? OnKeyPress;
         public event Action? OnSolveModeChange;
+        public event Action? OnWrongSolve;
 
         public string? Phrase { get; private set; }
         public Dictionary<string, KeyState>? KeyStates { get; private set; }
@@ -29,7 +33,7 @@ namespace Phrazy.Client.Services
 
         public List<List<PhraseLetterStateBox>> Start()
         {
-            Phrase = "too cool for bitchin' elementary school";
+            Phrase = "too cool for school";
 
             // init the stuff
             KeyStates = new Dictionary<string, KeyState>();
@@ -101,15 +105,11 @@ namespace Phrazy.Client.Services
                         if (letterToFocus != null)
                             letterToFocus.IsFocus = true;
                         else
-                            {
-                                // solve check
-                            }
+                            SolveCheck();
                     }
                 }
                 else
-                {
-                    // solve check
-                }
+                    SolveCheck();
 
                 OnKeyPress?.Invoke();
             }
@@ -134,6 +134,29 @@ namespace Phrazy.Client.Services
                 KeyStates[letter] = hit ? KeyStates![letter] = KeyState.Hit : KeyStates![letter] = KeyState.Miss;
 
                 OnKeyPress?.Invoke();
+            }
+        }
+
+        private void SolveCheck()
+        {
+            var solveAttempt = new StringBuilder();
+            foreach (var item in PhraseLetterStateBoxes!)
+            {
+                if (item.PhraseLetterState == PhraseLetterState.Guessed || item.PhraseLetterState == PhraseLetterState.Special)
+                    solveAttempt.Append(item.Letter);
+                if (item.PhraseLetterState == PhraseLetterState.Solve && !string.IsNullOrEmpty(item.SolveLetter))
+                    solveAttempt.Append(item.SolveLetter);
+            }
+
+            var scrubbedPhrase = Phrase!.Replace(" ", "");
+            if (scrubbedPhrase == solveAttempt.ToString())
+            {
+                // correct you win
+
+            }
+            else
+            {
+                OnWrongSolve?.Invoke();
             }
         }
 

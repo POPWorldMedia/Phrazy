@@ -36,7 +36,7 @@ header div {
 
 .letter.focus {
     box-shadow: 0 0 0.4em 0.4em red;
-    z-index: 1000;
+    z-index: 10;
 }
 
 .letterContainer {
@@ -186,6 +186,46 @@ header div {
 .solveKey {
     flex: 2;
 }
+
+
+
+#wrong {
+    position: absolute;
+    z-index: -1;
+    color: white;
+    background-color: red;
+    border-radius: .2em;
+    font-size: 1.5em;
+    font-weight: bold;
+    left: calc(50% - 5em);
+    top: calc(50% - 1em);
+    width: 10em;
+    height: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+}
+
+#wrong.flash {
+    animation-name: wiggle;
+    animation-duration: 2000ms;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes wiggle {
+    5% {transform: translate(-2em);opacity: 1;z-index: 100;}
+    10% {transform: translate(2em);}
+    15% {transform: translate(-2em);}
+    20% {transform: translate(2em);}
+    25% {transform: translate(0em);}
+    70% {opacity: 1;}
+    99% {opacity: 0;}
+    100% {opacity: 0;z-index: -1;}
+}
+
+
 
 
 #blazor-error-ui {
