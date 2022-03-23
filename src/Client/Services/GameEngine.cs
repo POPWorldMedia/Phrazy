@@ -89,7 +89,29 @@ namespace Phrazy.Client.Services
             if (IsSolveMode)
             {
                 // solve mode
+                var notGuessed = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
+                if (notGuessed.Any())
+                {
+                    var letterToTypeIn = notGuessed.FirstOrDefault(x => x.PhraseLetterState == PhraseLetterState.Solve && string.IsNullOrEmpty(x.SolveLetter));
+                    if (letterToTypeIn != null)
+                    {
+                        letterToTypeIn.IsFocus = false;
+                        letterToTypeIn.SolveLetter = letter;
+                        var letterToFocus = notGuessed.FirstOrDefault(x => x.PhraseLetterState == PhraseLetterState.Solve && string.IsNullOrEmpty(x.SolveLetter));
+                        if (letterToFocus != null)
+                            letterToFocus.IsFocus = true;
+                        else
+                            {
+                                // solve check
+                            }
+                    }
+                }
+                else
+                {
+                    // solve check
+                }
 
+                OnKeyPress?.Invoke();
             }
             else
             {
@@ -122,12 +144,18 @@ namespace Phrazy.Client.Services
                 // go back to regular guess mode
                 var lettersInSolveMode = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
                 foreach (var letter in lettersInSolveMode)
+                {
                     letter.PhraseLetterState = PhraseLetterState.NotGuessed;
+                    letter.IsFocus = false;
+                    letter.SolveLetter = string.Empty;
+                }
             }
             else
             {
                 // go into solve mode
                 var lettersInNotGuessedMode = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+                if (lettersInNotGuessedMode.Any())
+                    lettersInNotGuessedMode[0].IsFocus = true;
                 foreach (var letter in lettersInNotGuessedMode)
                     letter.PhraseLetterState = PhraseLetterState.Solve;
             }

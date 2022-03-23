@@ -34,6 +34,11 @@ header div {
     margin-right: .2em;
 }
 
+.letter.focus {
+    box-shadow: 0 0 0.4em 0.4em red;
+    z-index: 1000;
+}
+
 .letterContainer {
     height: 100%; width: 100%;
     transform-style: preserve-3d;
