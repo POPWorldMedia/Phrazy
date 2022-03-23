@@ -167,10 +167,23 @@ namespace Phrazy.Client.Services
         public void SolveBackspace()
         {
             // if you can backspace
-
-
+            var lastLetterInGuessWithSolveLetter = PhraseLetterStateBoxes!.FindLast(x => !string.IsNullOrEmpty(x.SolveLetter));
+            if (lastLetterInGuessWithSolveLetter != null)
+            {
+                ClearAllSolveFocus();
+                lastLetterInGuessWithSolveLetter.IsFocus = true;
+                lastLetterInGuessWithSolveLetter.SolveLetter = string.Empty;
+                OnKeyPress?.Invoke();
+            }
+            else
             // no more backspace
             ToggleSolveMode();
+        }
+
+        private void ClearAllSolveFocus()
+        {
+            foreach (var item in PhraseLetterStateBoxes!)
+                item.IsFocus = false;
         }
     }
 }

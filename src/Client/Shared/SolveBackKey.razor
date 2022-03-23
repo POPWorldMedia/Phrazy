@@ -1,5 +1,6 @@
 ﻿@using Phrazy.Client.Services
 @inject IGameEngine _gameEngine
+@inject IJSRuntime _jsRuntime
 
 <button class="key solveKey " @onclick="Click">@if (_gameEngine.IsSolveMode)
     {
@@ -24,8 +25,9 @@
     {
     }
 
-    private void Click()
+    private async Task Click()
     {
+        await _jsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
         if (_gameEngine.IsSolveMode)
             _gameEngine.SolveBackspace();
         else
