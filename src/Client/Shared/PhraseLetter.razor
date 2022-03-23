@@ -2,17 +2,10 @@
 @using Phrazy.Client.Services
 @inject IGameEngine _gameEngine
 
-@*<div class="letter @PhraseLetterStateBox.PhraseLetterState">
-    @if (PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special)
-    {
-        @PhraseLetterStateBox.Letter
-    }
-</div>
-*@
 <div class="letter">
-    <div class="letterContainer @(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special ? "flipped" : "")">
+    <div class="letterContainer @(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special or PhraseLetterState.Solve ? "flipped" : "")">
         <div></div>
-        <div class="Guessed">@(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special ? PhraseLetterStateBox.Letter : "")</div>
+        <div class="Guessed @(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Solve ? "Solve" : "")">@(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Guessed or PhraseLetterState.Special ? PhraseLetterStateBox.Letter : "")@(PhraseLetterStateBox.PhraseLetterState is PhraseLetterState.Solve ? PhraseLetterStateBox.SolveLetter : "")</div>
     </div>
 </div>
 

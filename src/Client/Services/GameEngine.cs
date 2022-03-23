@@ -4,25 +4,28 @@ namespace Phrazy.Client.Services
 {
     public interface IGameEngine
     {
-        string? Phrase { get; set; }
-        Dictionary<string, KeyState>? KeyStates { get; set; }
-        List<GuessRecord>? GuessRecords { get; set; }
+        string? Phrase { get; }
+        Dictionary<string, KeyState>? KeyStates { get; }
+        List<GuessRecord>? GuessRecords { get; }
+        bool IsSolveMode { get; }
         void ChooseLetter(string letter);
         List<List<PhraseLetterStateBox>> Start();
         event Action OnKeyPress;
+        event Action? OnSolveModeChange;
+        void ToggleSolveMode();
+        void SolveBackspace();
     }
 
     public class GameEngine : IGameEngine
     {
         public event Action? OnKeyPress;
+        public event Action? OnSolveModeChange;
 
-        public string? Phrase { get; set; }
-
-        public Dictionary<string, KeyState>? KeyStates { get; set; }
-
-        public List<PhraseLetterStateBox>? PhraseLetterStateBoxes { get; set; }
-
-        public List<GuessRecord>? GuessRecords { get; set; }
+        public string? Phrase { get; private set; }
+        public Dictionary<string, KeyState>? KeyStates { get; private set; }
+        public List<PhraseLetterStateBox>? PhraseLetterStateBoxes { get; private set; }
+        public List<GuessRecord>? GuessRecords { get; private set; }
+        public bool IsSolveMode { get; private set; }
 
         public List<List<PhraseLetterStateBox>> Start()
         {
@@ -35,6 +38,7 @@ namespace Phrazy.Client.Services
             foreach (var letter in array)
                 KeyStates.Add(letter.ToString(), KeyState.NotChosen);
             GuessRecords = new List<GuessRecord>();
+            IsSolveMode = false;
 
             // divy up the letters
             PhraseLetterStateBoxes = new List<PhraseLetterStateBox>();
@@ -60,24 +64,85 @@ namespace Phrazy.Client.Services
 
         public void ChooseLetter(string letter)
         {
-            if (KeyStates![letter] != KeyState.NotChosen)
-                return;
-
-            var hit = false;
-            foreach (var stateBox in PhraseLetterStateBoxes!)
+            if (letter == " ")
             {
-                if (stateBox.Letter == letter)
+                if (IsSolveMode)
+                    // ignore space if you're in solve mode
+                    return;
+                // keyboard input to enter solve mode
+                ToggleSolveMode();
+                return;
+            }
+            if (letter == "backspace")
+            {
+                // keyboard input to backspace in solve mode
+                if (!IsSolveMode)
+                    // enter into solve mode
                 {
-                    stateBox.PhraseLetterState = PhraseLetterState.Guessed;
-                    hit = true;
+                    ToggleSolveMode();
+                    return;
                 }
+                SolveBackspace();
+                return;
             }
 
-            GuessRecords?.Add(new GuessRecord {IsCorrect = hit, Letter = letter});
+            if (IsSolveMode)
+            {
+                // solve mode
 
-            KeyStates[letter] = hit ? KeyStates![letter] = KeyState.Hit : KeyStates![letter] = KeyState.Miss;
+            }
+            else
+            {
+                // guessing mode
+                if (KeyStates![letter] != KeyState.NotChosen)
+                    return;
 
+                var hit = false;
+                foreach (var stateBox in PhraseLetterStateBoxes!)
+                {
+                    if (stateBox.Letter == letter)
+                    {
+                        stateBox.PhraseLetterState = PhraseLetterState.Guessed;
+                        hit = true;
+                    }
+                }
+
+                GuessRecords?.Add(new GuessRecord {IsCorrect = hit, Letter = letter});
+
+                KeyStates[letter] = hit ? KeyStates![letter] = KeyState.Hit : KeyStates![letter] = KeyState.Miss;
+
+                OnKeyPress?.Invoke();
+            }
+        }
+
+        public void ToggleSolveMode()
+        {
+            if (IsSolveMode)
+            {
+                // go back to regular guess mode
+                var lettersInSolveMode = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
+                foreach (var letter in lettersInSolveMode)
+                    letter.PhraseLetterState = PhraseLetterState.NotGuessed;
+            }
+            else
+            {
+                // go into solve mode
+                var lettersInNotGuessedMode = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+                foreach (var letter in lettersInNotGuessedMode)
+                    letter.PhraseLetterState = PhraseLetterState.Solve;
+            }
+            IsSolveMode = !IsSolveMode;
+            OnSolveModeChange?.Invoke();
             OnKeyPress?.Invoke();
+        }
+
+        public void SolveBackspace()
+        {
+            // if you can backspace
+
+
+            // no more backspace
+            ToggleSolveMode();
         }
     }
 }

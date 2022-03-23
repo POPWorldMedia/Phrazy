@@ -26,7 +26,7 @@
 
     private void HandleKey(KeyboardEventArgs e)
     {
-        if (Regex.IsMatch(e.Key, "^[a-zA-Z]{1}$"))
+        if (Regex.IsMatch(e.Key, "^[a-zA-Z]{1}$") || e.Key == " " || e.Key.ToLower() == "backspace")
         {
             _gameEngine.ChooseLetter(e.Key.ToLower());
         }

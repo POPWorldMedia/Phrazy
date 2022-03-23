@@ -60,6 +60,11 @@ header div {
     transform: rotateY(180deg);
 }
 
+.Guessed.Solve {
+    background-color: yellow;
+    color: black;
+}
+
 .flipped {
     transform: rotateY(-180deg);
 }
@@ -172,6 +177,9 @@ header div {
 .halfKey {
     flex: 0.5;
     margin: .1em;
+}
+.solveKey {
+    flex: 2;
 }
 
 
