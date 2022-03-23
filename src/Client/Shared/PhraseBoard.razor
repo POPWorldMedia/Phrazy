@@ -2,9 +2,10 @@
 @using Phrazy.Client.Models
 @inject IGameEngine _gameEngine;
 
-<Wrong></Wrong>
-
 <div id="phraseBoard">
+
+    <Wrong></Wrong>
+
     @foreach (var word in _words)
     {
         <PhraseWord Word="@word"></PhraseWord>

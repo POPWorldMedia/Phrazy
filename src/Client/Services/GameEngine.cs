@@ -133,6 +133,8 @@ namespace Phrazy.Client.Services
 
                 KeyStates[letter] = hit ? KeyStates![letter] = KeyState.Hit : KeyStates![letter] = KeyState.Miss;
 
+                // TODO: call it solved with score zero if all letters are picked
+
                 OnKeyPress?.Invoke();
             }
         }
