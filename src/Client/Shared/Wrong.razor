@@ -7,7 +7,7 @@
 
 @code {
     private string _flashClass = string.Empty;
-    private System.Timers.Timer timer = null!;
+    private System.Timers.Timer _timer = null!;
 
     protected override void OnInitialized()
     {
@@ -16,16 +16,21 @@
 
     private void Flash()
     {
+        _timer = null!;
         _flashClass = string.Empty;
         _flashClass = "flash";
         StateHasChanged();
-        timer = new System.Timers.Timer(2100);
-        timer.Elapsed += (sender, args) =>
-        {
-            _flashClass = string.Empty;
-            StateHasChanged();
-            timer.Enabled = false;
-        };
-        timer.Enabled = true;
+        _timer = new System.Timers.Timer(2100);
+        _timer.Elapsed += (sender, args) => TimerCallback();
+        _timer.Enabled = true;
     }
+
+    private void TimerCallback()
+    {
+        _flashClass = string.Empty;
+        StateHasChanged();
+        _timer.Enabled = false;
+        _timer = null!;
+    }
+
 }
