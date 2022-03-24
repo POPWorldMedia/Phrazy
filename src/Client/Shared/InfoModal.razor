@@ -3,20 +3,37 @@
 
 <div id="dialog" class="@(_isOpen ? "open" : "")">
     <div>
-        <div id="closeButton" @onclick="Close">
+        <div id="closeButton" @onclick="() => Toggle(false)">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                 <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
             </svg>
         </div>
-        @if (_isShowResults)
+        @if (_isShowResults && _gameEngine.Results != null)
         {
             <div id="results">
-                results
+                <h2>@(_gameEngine.Results.IsWin ? "Solved!" : "Fail!")</h2>
+                <div id="scores">
+                    <div>
+                        <h3>Guesses</h3>
+                        <p>@_gameEngine.Results.LettersUsed</p>
+                    </div>
+                    <div>
+                        <h3>Time Left</h3>
+                        <p>@_gameEngine.Results.SecondsLeft</p>
+                    </div>
+                    <div>
+                        <h3>Score</h3>
+                        <p>@_gameEngine.Results.Score</p>
+                    </div>
+                </div>
             </div>
         }
-        <div>
+        <div id="rules">
             <h2>How To Play</h2>
             <p>Choose letters to guess the phrase. Press solve to fill in the blanks. Score high with as much time and as many letters remaining.</p>
+        </div>
+        <div id="copyright">
+            <p>&copy;@DateTime.Now.Year, POP World Media, LLC</p>
         </div>
     </div>
 </div>
@@ -28,12 +45,13 @@
     protected override void OnInitialized()
     {
         _isOpen = true;
+        _gameEngine.OnDialogOpen += Toggle;
     }
 
-    private void Close()
+    private void Toggle(bool isOpen)
     {
-        _isOpen = false;
+        _isOpen = isOpen;
+        _isShowResults = _gameEngine.Results != null;
         StateHasChanged();
     }
-
 }

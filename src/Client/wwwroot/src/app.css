@@ -51,13 +51,16 @@ header div {
     position: relative;
     border: #777777;
     width: 95%;
+    max-width: 520px;
     height: 90%;
-    font-size: 4vw;
+    font-size: 3.5vmin;
     padding: 1vw;
     transform: scale(1);
     z-index: -1;
     padding: 4vw;
     border-radius: 2vw;
+    display: flex;
+    flex-direction: column;
 }
 
 #dialog.open {
@@ -88,7 +91,33 @@ header div {
 #dialog h2 {
     text-align: center;
     text-transform: uppercase;
-    font-size: 6vw;
+    font-size: 4.5vmin;
+}
+#dialog h3 {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 3.5vmin;
+}
+
+#dialog #rules {
+    height: 100%;
+}
+
+#dialog #copyright {
+    font-size: 2.5vmin;
+    margin-top: 4vmin;
+    text-align: center;
+}
+
+#results #scores {
+    display: flex;
+    justify-content: center;
+}
+#results #scores div {
+    flex: 1;
+    text-align: center;
+    font-size: 6vmin;
+    font-weight: bold;
 }
 
 
@@ -222,7 +251,7 @@ header div {
     user-select: none;
     cursor: pointer;
     text-transform: uppercase;
-    font-size: 1.5em;
+    font-size: 1.4em;
     height: 2.5em;
     padding: 0;
     border-radius: .2em;

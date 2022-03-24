@@ -8,11 +8,13 @@ namespace Phrazy.Client.Services
         event Action OnKeyPress;
         event Action? OnSolveModeChange;
         event Action? OnWrongSolve;
+        event Action<bool>? OnDialogOpen;
 
         string? Phrase { get; }
         Dictionary<string, KeyState>? KeyStates { get; }
         List<GuessRecord>? GuessRecords { get; }
         bool IsSolveMode { get; }
+        Results? Results { get; }
         void ChooseLetter(string letter);
         List<List<PhraseLetterStateBox>> Start();
         void ToggleSolveMode();
@@ -24,12 +26,14 @@ namespace Phrazy.Client.Services
         public event Action? OnKeyPress;
         public event Action? OnSolveModeChange;
         public event Action? OnWrongSolve;
+        public event Action<bool>? OnDialogOpen;
 
         public string? Phrase { get; private set; }
         public Dictionary<string, KeyState>? KeyStates { get; private set; }
         public List<PhraseLetterStateBox>? PhraseLetterStateBoxes { get; private set; }
         public List<GuessRecord>? GuessRecords { get; private set; }
         public bool IsSolveMode { get; private set; }
+        public Results? Results { get; private set; }
 
         public List<List<PhraseLetterStateBox>> Start()
         {
@@ -43,6 +47,7 @@ namespace Phrazy.Client.Services
                 KeyStates.Add(letter.ToString(), KeyState.NotChosen);
             GuessRecords = new List<GuessRecord>();
             IsSolveMode = false;
+            Results = null!;
 
             // divy up the letters
             PhraseLetterStateBoxes = new List<PhraseLetterStateBox>();
@@ -154,7 +159,13 @@ namespace Phrazy.Client.Services
             if (scrubbedPhrase == solveAttempt.ToString())
             {
                 // correct you win
-
+                var lettersUsed = GuessRecords!.Count;
+                Results = new Results
+                {
+                    IsWin = true,
+                    LettersUsed = lettersUsed
+                };
+                OnDialogOpen?.Invoke(true);
             }
             else
             {
