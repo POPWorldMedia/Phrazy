@@ -15,6 +15,7 @@ namespace Phrazy.Client.Services
         List<GuessRecord>? GuessRecords { get; }
         bool IsSolveMode { get; }
         Results? Results { get; }
+        bool IsGameOver { get; }
         void ChooseLetter(string letter);
         List<List<PhraseLetterStateBox>> Start();
         void ToggleSolveMode();
@@ -35,6 +36,7 @@ namespace Phrazy.Client.Services
         public List<GuessRecord>? GuessRecords { get; private set; }
         public bool IsSolveMode { get; private set; }
         public Results? Results { get; private set; }
+        public bool IsGameOver { get; private set; }
 
         public List<List<PhraseLetterStateBox>> Start()
         {
@@ -49,6 +51,7 @@ namespace Phrazy.Client.Services
             GuessRecords = new List<GuessRecord>();
             IsSolveMode = false;
             Results = null!;
+            IsGameOver = false;
 
             // divy up the letters
             PhraseLetterStateBoxes = new List<PhraseLetterStateBox>();
@@ -166,6 +169,7 @@ namespace Phrazy.Client.Services
                     IsWin = true,
                     LettersUsed = lettersUsed
                 };
+                IsGameOver = true;
                 OpenDialog();
             }
             else

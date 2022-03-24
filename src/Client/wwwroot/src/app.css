@@ -54,6 +54,7 @@ header div:last-child {
     justify-content: center;
     align-items: center;
     z-index: -1;
+	user-select: none;
 }
 
 #dialog > div {
@@ -73,7 +74,7 @@ header div:last-child {
 }
 
 #dialog.open {
-    z-index: 200;
+    z-index: 2000;
     display: flex;
     animation-name: scale;
     animation-duration: .5s;
@@ -251,6 +252,7 @@ header div:last-child {
     width: 100%;
     max-width: 500px;
     margin: 1em auto;
+	position: relative;
 }
 .keyboardRow {
     display: flex;
@@ -291,13 +293,32 @@ header div:last-child {
     flex: 2;
 }
 
+#keyboard #gameOver {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	z-index: 999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#keyboard #gameOver div {
+    user-select: none;
+    background-color: darkred;
+    color: white;
+    padding: 1.25em 2.5em;
+    border-radius: .2em;
+    font-size: 2em;
+    font-weight: bold;
+}
+
 
 
 #wrong {
     position: absolute;
     z-index: -1;
     color: white;
-    background-color: red;
+    background-color: darkred;
     border-radius: .2em;
     font-size: 1.5em;
     font-weight: bold;

@@ -1,43 +1,66 @@
-﻿<div id="keyboard">
-    <div class="keyboardRow">
-        <Key Letter="q"></Key>
-        <Key Letter="w"></Key>
-        <Key Letter="e"></Key>
-        <Key Letter="r"></Key>
-        <Key Letter="t"></Key>
-        <Key Letter="y"></Key>
-        <Key Letter="u"></Key>
-        <Key Letter="i"></Key>
-        <Key Letter="o"></Key>
-        <Key Letter="p"></Key>
-    </div>
-    <div class="keyboardRow">
-        <div class="halfKey"></div>
-        <Key Letter="a"></Key>
-        <Key Letter="s"></Key>
-        <Key Letter="d"></Key>
-        <Key Letter="f"></Key>
-        <Key Letter="g"></Key>
-        <Key Letter="h"></Key>
-        <Key Letter="j"></Key>
-        <Key Letter="k"></Key>
-        <Key Letter="l"></Key>
-        <div class="halfKey"></div>
-    </div>
-    <div class="keyboardRow">
-        <div class="halfKey"></div>
-        <div class="halfKey"></div>
-        <Key Letter="z"></Key>
-        <Key Letter="x"></Key>
-        <Key Letter="c"></Key>
-        <Key Letter="v"></Key>
-        <Key Letter="b"></Key>
-        <Key Letter="n"></Key>
-        <Key Letter="m"></Key>
-        <SolveBackKey></SolveBackKey>
-    </div>
+﻿@using Phrazy.Client.Services
+@inject IGameEngine _gameEngine
+
+<div id="keyboard">
+	<div>
+		<div class="keyboardRow">
+			<Key Letter="q"></Key>
+			<Key Letter="w"></Key>
+			<Key Letter="e"></Key>
+			<Key Letter="r"></Key>
+			<Key Letter="t"></Key>
+			<Key Letter="y"></Key>
+			<Key Letter="u"></Key>
+			<Key Letter="i"></Key>
+			<Key Letter="o"></Key>
+			<Key Letter="p"></Key>
+		</div>
+		<div class="keyboardRow">
+			<div class="halfKey"></div>
+			<Key Letter="a"></Key>
+			<Key Letter="s"></Key>
+			<Key Letter="d"></Key>
+			<Key Letter="f"></Key>
+			<Key Letter="g"></Key>
+			<Key Letter="h"></Key>
+			<Key Letter="j"></Key>
+			<Key Letter="k"></Key>
+			<Key Letter="l"></Key>
+			<div class="halfKey"></div>
+		</div>
+		<div class="keyboardRow">
+			<div class="halfKey"></div>
+			<div class="halfKey"></div>
+			<Key Letter="z"></Key>
+			<Key Letter="x"></Key>
+			<Key Letter="c"></Key>
+			<Key Letter="v"></Key>
+			<Key Letter="b"></Key>
+			<Key Letter="n"></Key>
+			<Key Letter="m"></Key>
+			<SolveBackKey></SolveBackKey>
+		</div>
+	</div>
+	@if (_isGameOver)
+	{
+		<div id="gameOver">
+			<div>GAME OVER</div>
+		</div>
+	}
 </div>
 
 @code {
+	private bool _isGameOver;
+
+	protected override void OnInitialized()
+	{
+		_gameEngine.OnKeyPress += SetGameOver;
+	}
+
+	private void SetGameOver()
+	{
+		_isGameOver = _gameEngine.IsGameOver;
+		StateHasChanged();
+	}
 
 }
