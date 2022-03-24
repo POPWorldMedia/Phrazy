@@ -34,13 +34,14 @@ header div:first-child {
     font-size: 1.5em;
     font-weight: bold;
     width: 100%;
-	margin-left: 1em;
+	padding-left: .5em;
 }
 header div:last-child {
 	display: flex;
     justify-content: center;
     align-items: center;
 	cursor: pointer;
+	padding-right: .5em;
 }
 
 
