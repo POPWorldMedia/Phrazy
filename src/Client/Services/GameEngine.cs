@@ -77,6 +77,9 @@ namespace Phrazy.Client.Services
 
         public void ChooseLetter(string letter)
         {
+            if (IsGameOver)
+                return;
+
             if (letter == " ")
             {
                 if (IsSolveMode)
@@ -142,7 +145,36 @@ namespace Phrazy.Client.Services
 
                 KeyStates[letter] = hit ? KeyStates![letter] = KeyState.Hit : KeyStates![letter] = KeyState.Miss;
 
-                // TODO: call it solved with score zero if all letters are picked
+                // all the letters are picked
+                var lettersRemaining = KeyStates.Where(x => x.Value == KeyState.NotChosen);
+                if (!lettersRemaining.Any())
+                {
+	                Results = new Results
+	                {
+		                IsWin = false,
+		                LettersUsed = 26,
+                        Score = 0
+                        // TODO: time left
+	                };
+	                IsGameOver = true;
+	                OpenDialog();
+                }
+
+                // all possible hits are made
+                var notGuessed = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+                if (!notGuessed.Any())
+                {
+	                var lettersUsed = GuessRecords!.Count;
+	                Results = new Results
+	                {
+		                IsWin = true,
+		                LettersUsed = lettersUsed,
+		                // TODO: score
+		                // TODO: time left
+	                };
+	                IsGameOver = true;
+	                OpenDialog();
+                }
 
                 OnKeyPress?.Invoke();
             }
