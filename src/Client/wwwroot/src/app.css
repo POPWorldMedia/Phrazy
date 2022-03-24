@@ -6,6 +6,10 @@
     body {
         background: #222;
         color: white;
+        scrollbar-color: dark;
+    }
+    #dialog > div {
+        background-color: #555;
     }
 }
 
@@ -13,6 +17,10 @@
     body {
         background: white;
         color: black;
+        scrollbar-color: light;
+    }
+    #dialog > div {
+        background-color: #ccc;
     }
 }
 
@@ -23,6 +31,64 @@ header div {
     font-size: 2em;
     font-weight: bold;
     text-align: center;
+}
+
+
+
+#dialog {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+}
+
+#dialog > div {
+    position: relative;
+    border: #777777;
+    width: 95%;
+    height: 90%;
+    font-size: 4vw;
+    padding: 1vw;
+    transform: scale(1);
+    z-index: -1;
+    padding: 4vw;
+    border-radius: 2vw;
+}
+
+#dialog.open {
+    z-index: 200;
+    display: flex;
+    animation-name: scale;
+    animation-duration: .5s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes scale {
+    0% {
+        z-index: 200;
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+#dialog #closeButton {
+    text-align: end;
+    cursor: pointer;
+}
+
+#dialog h2 {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 6vw;
 }
 
 
@@ -59,7 +125,7 @@ header div {
     color: white;
     background-color: green;
     font-weight: bold;
-    text-transform: capitalize;
+    text-transform: uppercase;
     justify-content: center;
     align-items: center;
     transform: rotateY(180deg);
@@ -155,7 +221,7 @@ header div {
 .key {
     user-select: none;
     cursor: pointer;
-    text-transform: capitalize;
+    text-transform: uppercase;
     font-size: 1.5em;
     height: 2.5em;
     padding: 0;
