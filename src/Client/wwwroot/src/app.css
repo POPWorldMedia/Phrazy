@@ -65,12 +65,10 @@ header div:last-child {
     width: 95%;
     max-width: 520px;
     height: 90%;
-    font-size: 3.5vmin;
-    padding: 1vw;
     transform: scale(1);
     z-index: -1;
-    padding: 4vw;
-    border-radius: 2vw;
+    padding: 1em;
+    border-radius: .4em;
     display: flex;
     flex-direction: column;
 }
@@ -125,12 +123,10 @@ header div:last-child {
 #dialog h2 {
     text-align: center;
     text-transform: uppercase;
-    font-size: 4.5vmin;
 }
 #dialog h3 {
     text-align: center;
     text-transform: uppercase;
-    font-size: 3.5vmin;
 }
 
 #dialog #rules {
@@ -138,8 +134,8 @@ header div:last-child {
 }
 
 #dialog #copyright {
-    font-size: 2.5vmin;
-    margin-top: 4vmin;
+    font-size: .8em;
+    margin-top: .5em;
     text-align: center;
 }
 
@@ -150,7 +146,7 @@ header div:last-child {
 #results #scores div {
     flex: 1;
     text-align: center;
-    font-size: 6vmin;
+	font-size: 2em;
     font-weight: bold;
 }
 
