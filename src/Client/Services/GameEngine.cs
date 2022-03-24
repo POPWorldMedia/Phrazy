@@ -159,21 +159,23 @@ namespace Phrazy.Client.Services
 	                IsGameOver = true;
 	                OpenDialog();
                 }
-
-                // all possible hits are made
-                var notGuessed = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
-                if (!notGuessed.Any())
+                else
                 {
-	                var lettersUsed = GuessRecords!.Count;
-	                Results = new Results
+	                // all possible hits are made
+	                var notGuessed = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+	                if (!notGuessed.Any())
 	                {
-		                IsWin = true,
-		                LettersUsed = lettersUsed,
-		                // TODO: score
-		                // TODO: time left
-	                };
-	                IsGameOver = true;
-	                OpenDialog();
+		                var lettersUsed = GuessRecords!.Count;
+		                Results = new Results
+		                {
+			                IsWin = true,
+			                LettersUsed = lettersUsed,
+			                // TODO: score
+			                // TODO: time left
+		                };
+		                IsGameOver = true;
+		                OpenDialog();
+	                }
                 }
 
                 OnKeyPress?.Invoke();
