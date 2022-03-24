@@ -34,6 +34,7 @@ header div:first-child {
     font-size: 1.5em;
     font-weight: bold;
     width: 100%;
+	margin-left: 1em;
 }
 header div:last-child {
 	display: flex;
@@ -80,6 +81,28 @@ header div:last-child {
     animation-duration: .5s;
     animation-iteration-count: 1;
     animation-timing-function: ease-in-out;
+}
+
+#dialog .key {
+	padding: .2em;
+	border-radius: .2em;
+	text-transform: uppercase;
+	background-color: darkgray;
+	color: black;
+    display: inline-block;
+    font-size: inherit;
+    height: auto;
+	margin: auto;
+}
+
+#dialog .key.hit {
+	background-color: green;
+	color: white;
+}
+
+#dialog .key.miss {
+	background-color: darkred;
+	color: white;
 }
 
 @keyframes scale {
