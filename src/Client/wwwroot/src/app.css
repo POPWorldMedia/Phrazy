@@ -24,13 +24,22 @@
     }
 }
 
-header {
-    border-bottom: solid .05em;
+header {border-bottom: solid .05em;}
+header > div {
+	max-width: 500px;
+    display: flex;
+	margin: 0 auto;
 }
-header div {
-    font-size: 2em;
+header div:first-child {
+    font-size: 1.5em;
     font-weight: bold;
-    text-align: center;
+    width: 100%;
+}
+header div:last-child {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	cursor: pointer;
 }
 
 

@@ -19,6 +19,7 @@ namespace Phrazy.Client.Services
         List<List<PhraseLetterStateBox>> Start();
         void ToggleSolveMode();
         void SolveBackspace();
+        void OpenDialog();
     }
 
     public class GameEngine : IGameEngine
@@ -165,7 +166,7 @@ namespace Phrazy.Client.Services
                     IsWin = true,
                     LettersUsed = lettersUsed
                 };
-                OnDialogOpen?.Invoke(true);
+                OpenDialog();
             }
             else
             {
@@ -220,6 +221,11 @@ namespace Phrazy.Client.Services
         {
             foreach (var item in PhraseLetterStateBoxes!)
                 item.IsFocus = false;
+        }
+
+        public void OpenDialog()
+        {
+	        OnDialogOpen?.Invoke(true);
         }
     }
 }
