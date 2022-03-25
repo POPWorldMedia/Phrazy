@@ -1,23 +1,31 @@
 ﻿@using Phrazy.Client.Services
 @using Phrazy.Client.Models
-@inject IGameEngine _gameEngine;
+@inject IGameEngine _gameEngine
 
 <div id="phraseBoard">
 
     <Wrong></Wrong>
-
-    @foreach (var word in _words)
+    
+    @if (_words != null)
     {
-        <PhraseWord Word="@word"></PhraseWord>
+	    foreach (var word in _words)
+	    {
+		    <PhraseWord Word="@word"></PhraseWord>
+	    }
     }
 </div>
 
 @code {
     private List<List<PhraseLetterStateBox>> _words = null!;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        _words = _gameEngine.Start();
-        return base.OnInitializedAsync();
+	    _gameEngine.OnBoardLoad += Load;
+        _words = await _gameEngine.Start();
     }
+
+	private void Load()
+	{
+		StateHasChanged();
+	}
 }

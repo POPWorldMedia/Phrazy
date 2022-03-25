@@ -9,6 +9,7 @@ namespace Phrazy.Client.Services
         event Action? OnSolveModeChange;
         event Action? OnWrongSolve;
         event Action<bool>? OnDialogOpen;
+        event Action? OnBoardLoad;
 
         string? Phrase { get; }
         Dictionary<string, KeyState>? KeyStates { get; }
@@ -17,7 +18,7 @@ namespace Phrazy.Client.Services
         Results? Results { get; }
         bool IsGameOver { get; }
         void ChooseLetter(string letter);
-        List<List<PhraseLetterStateBox>> Start();
+        Task<List<List<PhraseLetterStateBox>>> Start();
         void ToggleSolveMode();
         void SolveBackspace();
         void OpenDialog();
@@ -25,10 +26,13 @@ namespace Phrazy.Client.Services
 
     public class GameEngine : IGameEngine
     {
-        public event Action? OnKeyPress;
+	    private readonly IPuzzleService _puzzleService;
+
+	    public event Action? OnKeyPress;
         public event Action? OnSolveModeChange;
         public event Action? OnWrongSolve;
         public event Action<bool>? OnDialogOpen;
+        public event Action? OnBoardLoad;
 
         public string? Phrase { get; private set; }
         public Dictionary<string, KeyState>? KeyStates { get; private set; }
@@ -38,9 +42,15 @@ namespace Phrazy.Client.Services
         public Results? Results { get; private set; }
         public bool IsGameOver { get; private set; }
 
-        public List<List<PhraseLetterStateBox>> Start()
+        public GameEngine(IPuzzleService puzzleService)
         {
-            Phrase = "too cool for school";
+	        _puzzleService = puzzleService;
+        }
+
+        public async Task<List<List<PhraseLetterStateBox>>> Start()
+        {
+	        var puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
+            Phrase = puzzleDefinition.Puzzle;
 
             // init the stuff
             KeyStates = new Dictionary<string, KeyState>();
@@ -71,6 +81,8 @@ namespace Phrazy.Client.Services
                 }
                 wordsOfStateBoxes.Add(wordOfStateBoxes);
             }
+
+            OnBoardLoad?.Invoke();
 
             return wordsOfStateBoxes;
         }
