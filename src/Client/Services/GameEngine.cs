@@ -86,9 +86,33 @@ namespace Phrazy.Client.Services
         private void UpdateClock(object? sender, ElapsedEventArgs e)
         {
 	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
-	        var remainingTime = secondsElapsed - TotalGameSeconds - GameState.SecondPenalty;
-	        GameState.SecondsRemaining = (int)remainingTime;
+	        var remainingTime = secondsElapsed - TotalGameSeconds + GameState.SecondPenalty;
+	        GameState.SecondsRemaining = -(int)remainingTime;
+	        if (GameState.SecondsRemaining <= 0)
+	        {
+		        GameState.SecondsRemaining = 0;
+                End(false);
+	        }
 	        OnTimeUpdated?.Invoke();
+        }
+
+        private void End(bool isWinner)
+        {
+	        if (GameState.SecondsRemaining < 0)
+		        GameState.SecondsRemaining = 0;
+	        GameState.IsGameOver = true;
+	        var lettersUsed = GameState.GuessRecords.Count;
+	        GameState.Results = new Results
+	        {
+		        IsWin = isWinner,
+		        LettersUsed = lettersUsed,
+                Score = isWinner?  GameState.SecondsRemaining : 0
+	        };
+	        GameState.IsGameOver = true;
+	        OpenDialog();
+	        _timer.Stop();
+	        _stopwatch.Stop();
+	        OnKeyPress?.Invoke();
         }
 
         public void ChooseLetter(string letter)
@@ -163,6 +187,8 @@ namespace Phrazy.Client.Services
                     }
                 }
 
+                GameState.SecondPenalty += GuessTimePenalty;
+
                 GameState.GuessRecords.Add(new GuessRecord {IsCorrect = hit, Letter = letter});
 
                 GameState.KeyStates[letter] = hit ? GameState.KeyStates[letter] = KeyState.Hit : GameState.KeyStates[letter] = KeyState.Miss;
@@ -171,33 +197,17 @@ namespace Phrazy.Client.Services
                 var lettersRemaining = GameState.KeyStates.Where(x => x.Value == KeyState.NotChosen);
                 if (!lettersRemaining.Any())
                 {
-	                GameState.Results = new Results
-	                {
-		                IsWin = false,
-		                LettersUsed = 26,
-                        Score = 0
-                        // TODO: time left
-	                };
-	                GameState.IsGameOver = true;
-	                OpenDialog();
+	                UpdateClock(null, null!);
+	                End(false);
+	                return;
                 }
-                else
+
+                // all possible hits are made
+                var notGuessed = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+                if (!notGuessed.Any())
                 {
-	                // all possible hits are made
-	                var notGuessed = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
-	                if (!notGuessed.Any())
-	                {
-		                var lettersUsed = GameState.GuessRecords.Count;
-		                GameState.Results = new Results
-		                {
-			                IsWin = true,
-			                LettersUsed = lettersUsed,
-			                // TODO: score
-			                // TODO: time left
-		                };
-		                GameState.IsGameOver = true;
-		                OpenDialog();
-	                }
+	                End(false);
+	                return;
                 }
 
                 OnKeyPress?.Invoke();
@@ -219,19 +229,11 @@ namespace Phrazy.Client.Services
             if (scrubbedPhrase == solveAttempt.ToString())
             {
                 // correct you win
-                var lettersUsed = GameState.GuessRecords.Count;
-                GameState.Results = new Results
-                {
-                    IsWin = true,
-                    LettersUsed = lettersUsed
-                };
-                GameState.IsGameOver = true;
-                OpenDialog();
+                End(true);
+                return;
             }
-            else
-            {
-                OnWrongSolve?.Invoke();
-            }
+            
+            OnWrongSolve?.Invoke();
         }
 
         public void ToggleSolveMode()
