@@ -1,0 +1,22 @@
+﻿@using Phrazy.Client.Services
+@inject IGameEngine _gameEngine
+
+<div id="timer">
+	<span>
+
+	</span>
+	<span>@_gameEngine.GameState.SecondsRemaining</span>
+	
+</div>
+
+@code {
+	protected override void OnInitialized()
+	{
+		_gameEngine.OnTimeUpdated += UpdateTime;
+	}
+
+	private void UpdateTime()
+	{
+		StateHasChanged();
+	}
+}

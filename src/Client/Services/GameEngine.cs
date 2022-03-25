@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
+using System.Timers;
 using Phrazy.Client.Models;
+using Timer = System.Timers.Timer;
 
 namespace Phrazy.Client.Services
 {
@@ -17,6 +20,7 @@ namespace Phrazy.Client.Services
         void ToggleSolveMode();
         void SolveBackspace();
         void OpenDialog();
+        event Action? OnTimeUpdated;
     }
 
     public class GameEngine : IGameEngine
@@ -28,13 +32,24 @@ namespace Phrazy.Client.Services
         public event Action? OnWrongSolve;
         public event Action<bool>? OnDialogOpen;
         public event Action? OnBoardLoad;
+        public event Action? OnTimeUpdated;
 
         public GameState GameState { get; private set; }
+
+        private readonly Timer _timer;
+        private readonly Stopwatch _stopwatch;
+        private const int TotalGameSeconds = 120;  // total starting seconds available
+        private const int GuessTimePenalty = 5;    // seconds off per guess
 
         public GameEngine(IPuzzleService puzzleService)
         {
 	        _puzzleService = puzzleService;
 	        GameState = new GameState();
+	        _timer = new Timer(100);
+            _timer.Enabled = true;
+            _timer.AutoReset = true;
+            _timer.Elapsed += UpdateClock;
+	        _stopwatch = new Stopwatch();
         }
 
         public async Task<List<List<PhraseLetterStateBox>>> Start()
@@ -68,6 +83,14 @@ namespace Phrazy.Client.Services
             return wordsOfStateBoxes;
         }
 
+        private void UpdateClock(object? sender, ElapsedEventArgs e)
+        {
+	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
+	        var remainingTime = secondsElapsed - TotalGameSeconds - GameState.SecondPenalty;
+	        GameState.SecondsRemaining = (int)remainingTime;
+	        OnTimeUpdated?.Invoke();
+        }
+
         public void ChooseLetter(string letter)
         {
             if (GameState.IsGameOver)
@@ -93,6 +116,12 @@ namespace Phrazy.Client.Services
                 }
                 SolveBackspace();
                 return;
+            }
+
+            if (!_stopwatch.IsRunning)
+            {
+                _stopwatch.Start();
+                _timer.Start();
             }
 
             if (GameState.IsSolveMode)

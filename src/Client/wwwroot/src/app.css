@@ -228,6 +228,18 @@ header div:last-child {
 
 
 
+#timer {
+    display: flex;
+    text-align: center;
+    font-size: 1.5em;
+    padding: 1em 0;
+}
+#timer > span {
+    flex: 1;
+}
+
+
+
 #scoreTrail {
     display: flex;
     max-width: 500px;

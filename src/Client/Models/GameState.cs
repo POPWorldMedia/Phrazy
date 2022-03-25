@@ -42,4 +42,7 @@ public class GameState
 	public bool IsSolveMode { get; set; }
 	public Results? Results { get; set; }
 	public bool IsGameOver { get; set; }
+	public DateTime StartTime { get; set; }
+	public int SecondsRemaining { get; set; }
+	public int SecondPenalty { get; set; }
 }
