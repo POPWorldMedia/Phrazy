@@ -8,22 +8,22 @@
                 <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
             </svg>
         </div>
-        @if (_isShowResults && _gameEngine.Results != null)
+        @if (_isShowResults && _gameEngine.GameState.Results != null)
         {
             <div id="results">
-                <h2>@(_gameEngine.Results.IsWin ? "Solved!" : "Fail!")</h2>
+                <h2>@(_gameEngine.GameState.Results.IsWin ? "Solved!" : "Fail!")</h2>
                 <div id="scores">
                     <div>
                         <h3>Guesses</h3>
-                        <p>@_gameEngine.Results.LettersUsed</p>
+                        <p>@_gameEngine.GameState.Results.LettersUsed</p>
                     </div>
                     <div>
                         <h3>Time Left</h3>
-                        <p>@_gameEngine.Results.SecondsLeft</p>
+                        <p>@_gameEngine.GameState.Results.SecondsLeft</p>
                     </div>
                     <div>
                         <h3>Score</h3>
-                        <p>@_gameEngine.Results.Score</p>
+                        <p>@_gameEngine.GameState.Results.Score</p>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
     private void Toggle(bool isOpen)
     {
         _isOpen = isOpen;
-        _isShowResults = _gameEngine.Results != null;
+        _isShowResults = _gameEngine.GameState.Results != null;
         StateHasChanged();
     }
 }

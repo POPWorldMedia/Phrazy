@@ -3,7 +3,7 @@
 @inject IGameEngine _gameEngine
 @inject IJSRuntime _jsRuntime
 
-<button class="key @_gameEngine.KeyStates![Letter]" @onclick="Click">@Letter</button>
+<button class="key @_gameEngine.GameState.KeyStates[Letter]" @onclick="Click">@Letter</button>
 
 @code {
     [Parameter]

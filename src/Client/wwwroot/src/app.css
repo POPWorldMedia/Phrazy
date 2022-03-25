@@ -132,6 +132,7 @@ header div:last-child {
 
 #dialog #rules {
     height: 100%;
+    overflow-y: scroll;
 }
 
 #dialog #copyright {
@@ -352,6 +353,10 @@ header div:last-child {
     justify-content: center;
     align-items: center;
     opacity: 0;
+}
+
+#wrong > div > span > svg {
+    padding-bottom: .2em;
 }
 
 #wrong.flash {

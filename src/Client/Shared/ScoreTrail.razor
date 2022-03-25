@@ -3,21 +3,20 @@
 @inject IGameEngine _gameEngine;
 
 <div id="scoreTrail">
-	@if (_gameEngine.GuessRecords != null)
+
+	@for (int x = 0; x < _gameEngine.GameState.GuessRecords.Count; x++)
 	{
-		@for (int x = 0; x < _gameEngine.GuessRecords.Count; x++)
-		{
-			<div class="scoreBox">
-				<div class="scoreIndicator @(_gameEngine.GuessRecords[x].IsCorrect ? "guessCorrect" : "guessWrong") @(x == _gameEngine.GuessRecords.Count - 1 ? "explode" : "")"></div>
-			</div>
-		}
-		@for (int x = 0; x < 26 - _gameEngine.GuessRecords.Count; x++)
-		{
-			<div class="scoreBox">
-				<div class="scoreIndicator"></div>
-			</div>
-		}
+		<div class="scoreBox">
+			<div class="scoreIndicator @(_gameEngine.GameState.GuessRecords[x].IsCorrect ? "guessCorrect" : "guessWrong") @(x == _gameEngine.GameState.GuessRecords.Count - 1 ? "explode" : "")"></div>
+		</div>
 	}
+	@for (int x = 0; x < 26 - _gameEngine.GameState.GuessRecords.Count; x++)
+	{
+		<div class="scoreBox">
+			<div class="scoreIndicator"></div>
+		</div>
+	}
+
 </div>
 
 @code {

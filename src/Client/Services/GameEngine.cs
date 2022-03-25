@@ -10,13 +10,8 @@ namespace Phrazy.Client.Services
         event Action? OnWrongSolve;
         event Action<bool>? OnDialogOpen;
         event Action? OnBoardLoad;
-
-        string? Phrase { get; }
-        Dictionary<string, KeyState>? KeyStates { get; }
-        List<GuessRecord>? GuessRecords { get; }
-        bool IsSolveMode { get; }
-        Results? Results { get; }
-        bool IsGameOver { get; }
+        
+        GameState GameState { get; }
         void ChooseLetter(string letter);
         Task<List<List<PhraseLetterStateBox>>> Start();
         void ToggleSolveMode();
@@ -34,49 +29,35 @@ namespace Phrazy.Client.Services
         public event Action<bool>? OnDialogOpen;
         public event Action? OnBoardLoad;
 
-        public string? Phrase { get; private set; }
-        public Dictionary<string, KeyState>? KeyStates { get; private set; }
-        public List<PhraseLetterStateBox>? PhraseLetterStateBoxes { get; private set; }
-        public List<GuessRecord>? GuessRecords { get; private set; }
-        public bool IsSolveMode { get; private set; }
-        public Results? Results { get; private set; }
-        public bool IsGameOver { get; private set; }
+        public GameState GameState { get; private set; }
 
         public GameEngine(IPuzzleService puzzleService)
         {
 	        _puzzleService = puzzleService;
+	        GameState = new GameState();
         }
 
         public async Task<List<List<PhraseLetterStateBox>>> Start()
         {
 	        var puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
-            Phrase = puzzleDefinition.Puzzle;
 
-            // init the stuff
-            KeyStates = new Dictionary<string, KeyState>();
-            var alphabet = "abcdefghijklmnopqrstuvwxyz";
-            var array = alphabet.ToCharArray();
-            foreach (var letter in array)
-                KeyStates.Add(letter.ToString(), KeyState.NotChosen);
-            GuessRecords = new List<GuessRecord>();
-            IsSolveMode = false;
-            Results = null!;
-            IsGameOver = false;
+            GameState.Phrase = puzzleDefinition.Puzzle;
 
             // divy up the letters
-            PhraseLetterStateBoxes = new List<PhraseLetterStateBox>();
             var wordsOfStateBoxes = new List<List<PhraseLetterStateBox>>();
-            var words = Phrase.Split(' ');
+            var words = GameState.Phrase.Split(' ');
             foreach (var word in words)
             {
                 var wordOfStateBoxes = new List<PhraseLetterStateBox>();
                 var chars = word.ToCharArray();
+                var alphabet = "abcdefghijklmnopqrstuvwxyz";
+                var array = alphabet.ToCharArray();
                 foreach (var character in chars)
                 {
                     var initialState = array.Contains(character) ? PhraseLetterState.NotGuessed : PhraseLetterState.Special;
                     var stateBox = new PhraseLetterStateBox
                         {Letter = character.ToString(), PhraseLetterState = initialState};
-                    PhraseLetterStateBoxes.Add(stateBox);
+                    GameState.PhraseLetterStateBoxes.Add(stateBox);
                     wordOfStateBoxes.Add(stateBox);
                 }
                 wordsOfStateBoxes.Add(wordOfStateBoxes);
@@ -89,12 +70,12 @@ namespace Phrazy.Client.Services
 
         public void ChooseLetter(string letter)
         {
-            if (IsGameOver)
+            if (GameState.IsGameOver)
                 return;
 
             if (letter == " ")
             {
-                if (IsSolveMode)
+                if (GameState.IsSolveMode)
                     // ignore space if you're in solve mode
                     return;
                 // keyboard input to enter solve mode
@@ -104,7 +85,7 @@ namespace Phrazy.Client.Services
             if (letter == "backspace")
             {
                 // keyboard input to backspace in solve mode
-                if (!IsSolveMode)
+                if (!GameState.IsSolveMode)
                     // enter into solve mode
                 {
                     ToggleSolveMode();
@@ -114,10 +95,10 @@ namespace Phrazy.Client.Services
                 return;
             }
 
-            if (IsSolveMode)
+            if (GameState.IsSolveMode)
             {
                 // solve mode
-                var notGuessed = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
+                var notGuessed = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
                 if (notGuessed.Any())
                 {
                     var letterToTypeIn = notGuessed.FirstOrDefault(x => x.PhraseLetterState == PhraseLetterState.Solve && string.IsNullOrEmpty(x.SolveLetter));
@@ -140,11 +121,11 @@ namespace Phrazy.Client.Services
             else
             {
                 // guessing mode
-                if (KeyStates![letter] != KeyState.NotChosen)
+                if (GameState.KeyStates[letter] != KeyState.NotChosen)
                     return;
 
                 var hit = false;
-                foreach (var stateBox in PhraseLetterStateBoxes!)
+                foreach (var stateBox in GameState.PhraseLetterStateBoxes)
                 {
                     if (stateBox.Letter == letter)
                     {
@@ -153,39 +134,39 @@ namespace Phrazy.Client.Services
                     }
                 }
 
-                GuessRecords?.Add(new GuessRecord {IsCorrect = hit, Letter = letter});
+                GameState.GuessRecords.Add(new GuessRecord {IsCorrect = hit, Letter = letter});
 
-                KeyStates[letter] = hit ? KeyStates![letter] = KeyState.Hit : KeyStates![letter] = KeyState.Miss;
+                GameState.KeyStates[letter] = hit ? GameState.KeyStates[letter] = KeyState.Hit : GameState.KeyStates[letter] = KeyState.Miss;
 
                 // all the letters are picked
-                var lettersRemaining = KeyStates.Where(x => x.Value == KeyState.NotChosen);
+                var lettersRemaining = GameState.KeyStates.Where(x => x.Value == KeyState.NotChosen);
                 if (!lettersRemaining.Any())
                 {
-	                Results = new Results
+	                GameState.Results = new Results
 	                {
 		                IsWin = false,
 		                LettersUsed = 26,
                         Score = 0
                         // TODO: time left
 	                };
-	                IsGameOver = true;
+	                GameState.IsGameOver = true;
 	                OpenDialog();
                 }
                 else
                 {
 	                // all possible hits are made
-	                var notGuessed = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+	                var notGuessed = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
 	                if (!notGuessed.Any())
 	                {
-		                var lettersUsed = GuessRecords!.Count;
-		                Results = new Results
+		                var lettersUsed = GameState.GuessRecords.Count;
+		                GameState.Results = new Results
 		                {
 			                IsWin = true,
 			                LettersUsed = lettersUsed,
 			                // TODO: score
 			                // TODO: time left
 		                };
-		                IsGameOver = true;
+		                GameState.IsGameOver = true;
 		                OpenDialog();
 	                }
                 }
@@ -197,7 +178,7 @@ namespace Phrazy.Client.Services
         private void SolveCheck()
         {
             var solveAttempt = new StringBuilder();
-            foreach (var item in PhraseLetterStateBoxes!)
+            foreach (var item in GameState.PhraseLetterStateBoxes)
             {
                 if (item.PhraseLetterState == PhraseLetterState.Guessed || item.PhraseLetterState == PhraseLetterState.Special)
                     solveAttempt.Append(item.Letter);
@@ -205,17 +186,17 @@ namespace Phrazy.Client.Services
                     solveAttempt.Append(item.SolveLetter);
             }
 
-            var scrubbedPhrase = Phrase!.Replace(" ", "");
+            var scrubbedPhrase = GameState.Phrase.Replace(" ", "");
             if (scrubbedPhrase == solveAttempt.ToString())
             {
                 // correct you win
-                var lettersUsed = GuessRecords!.Count;
-                Results = new Results
+                var lettersUsed = GameState.GuessRecords.Count;
+                GameState.Results = new Results
                 {
                     IsWin = true,
                     LettersUsed = lettersUsed
                 };
-                IsGameOver = true;
+                GameState.IsGameOver = true;
                 OpenDialog();
             }
             else
@@ -226,10 +207,10 @@ namespace Phrazy.Client.Services
 
         public void ToggleSolveMode()
         {
-            if (IsSolveMode)
+            if (GameState.IsSolveMode)
             {
                 // go back to regular guess mode
-                var lettersInSolveMode = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
+                var lettersInSolveMode = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
                 foreach (var letter in lettersInSolveMode)
                 {
                     letter.PhraseLetterState = PhraseLetterState.NotGuessed;
@@ -240,13 +221,13 @@ namespace Phrazy.Client.Services
             else
             {
                 // go into solve mode
-                var lettersInNotGuessedMode = PhraseLetterStateBoxes!.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
+                var lettersInNotGuessedMode = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
                 if (lettersInNotGuessedMode.Any())
                     lettersInNotGuessedMode[0].IsFocus = true;
                 foreach (var letter in lettersInNotGuessedMode)
                     letter.PhraseLetterState = PhraseLetterState.Solve;
             }
-            IsSolveMode = !IsSolveMode;
+            GameState.IsSolveMode = !GameState.IsSolveMode;
             OnSolveModeChange?.Invoke();
             OnKeyPress?.Invoke();
         }
@@ -254,7 +235,7 @@ namespace Phrazy.Client.Services
         public void SolveBackspace()
         {
             // if you can backspace
-            var lastLetterInGuessWithSolveLetter = PhraseLetterStateBoxes!.FindLast(x => !string.IsNullOrEmpty(x.SolveLetter));
+            var lastLetterInGuessWithSolveLetter = GameState.PhraseLetterStateBoxes.FindLast(x => !string.IsNullOrEmpty(x.SolveLetter));
             if (lastLetterInGuessWithSolveLetter != null)
             {
                 ClearAllSolveFocus();
@@ -269,7 +250,7 @@ namespace Phrazy.Client.Services
 
         private void ClearAllSolveFocus()
         {
-            foreach (var item in PhraseLetterStateBoxes!)
+            foreach (var item in GameState.PhraseLetterStateBoxes)
                 item.IsFocus = false;
         }
 
