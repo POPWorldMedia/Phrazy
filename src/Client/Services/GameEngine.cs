@@ -39,7 +39,8 @@ namespace Phrazy.Client.Services
         private readonly Timer _timer;
         private readonly Stopwatch _stopwatch;
         private const int TotalGameSeconds = 120;  // total starting seconds available
-        private const int GuessTimePenalty = 5;    // seconds off per guess
+        private const int GuessTimePenalty = 5;    // seconds off per guess if using that rule
+        private const int UnusedLetterBonus = 10;
 
         public GameEngine(IPuzzleService puzzleService)
         {
@@ -102,13 +103,14 @@ namespace Phrazy.Client.Services
 		        GameState.SecondsRemaining = 0;
 	        GameState.IsGameOver = true;
 	        var lettersUsed = GameState.GuessRecords.Count;
-	        var score = GameState.SecondsRemaining + ((26 - lettersUsed) * 5);
+	        var score = GameState.SecondsRemaining + ((26 - lettersUsed) * UnusedLetterBonus);
 
             GameState.Results = new Results
 	        {
 		        IsWin = isWinner,
 		        LettersUsed = lettersUsed,
-                Score = isWinner?  score : 0
+                Score = isWinner?  score : 0,
+                SecondsLeft = GameState.SecondsRemaining
 	        };
 	        GameState.IsGameOver = true;
 	        OpenDialog();
