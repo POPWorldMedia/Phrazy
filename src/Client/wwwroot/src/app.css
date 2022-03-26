@@ -11,6 +11,9 @@
     #dialog > div {
         background-color: #555;
     }
+    a, a:visited, a:hover {
+	    color: #ddd;
+    }
 }
 
 @media (prefers-color-scheme: light) {
@@ -22,6 +25,9 @@
     #dialog > div {
         background-color: #ccc;
     }
+	a, a:visited, a:hover {
+		color: #555;
+	}
 }
 
 header {border-bottom: solid .05em;}
