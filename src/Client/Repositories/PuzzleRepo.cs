@@ -7,6 +7,7 @@ namespace Phrazy.Client.Repositories;
 public interface IPuzzleRepo
 {
 	Task<PuzzlePayload> GetPuzzleWithIdentifier(string id);
+	Task PutResults(ResultPayload resultPayload);
 }
 
 public class PuzzleRepo : IPuzzleRepo
@@ -22,5 +23,10 @@ public class PuzzleRepo : IPuzzleRepo
 	{
 		var puzzlePayload = await _httpClient.GetFromJsonAsync<PuzzlePayload>(ApiPaths.Puzzle.GetWithIdentifier.Replace("{id}", id));
 		return puzzlePayload!;
+	}
+
+	public async Task PutResults(ResultPayload resultPayload)
+	{
+		await _httpClient.PutAsJsonAsync(ApiPaths.Puzzle.PutResult, resultPayload);
 	}
 }

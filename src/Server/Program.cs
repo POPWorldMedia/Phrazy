@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using Phrazy.Server;
+using Phrazy.Server.Repositories;
 using Phrazy.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,10 @@ builder.Services.AddScoped(sp => new HttpClient
 
 var services = builder.Services;
 services.AddTransient<IPuzzleService, PuzzleService>();
+
+services.AddTransient<IResultRepository, ResultRepository>();
+
+services.AddSingleton<IConfig, Config>();
 
 var app = builder.Build();
 

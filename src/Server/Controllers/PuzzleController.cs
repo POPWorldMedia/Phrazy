@@ -18,8 +18,18 @@ namespace Phrazy.Server.Controllers
 		[HttpGet(ApiPaths.Puzzle.GetWithIdentifier)]
 		public async Task<PuzzlePayload> GetWithIdentifier(string id)
 		{
-			var payload =await _puzzleService.GetPayloadForToday(id);
+			var payload = await _puzzleService.GetPayloadForToday(id);
 			return payload;
+		}
+
+		[HttpPut(ApiPaths.Puzzle.PutResult)]
+		public async Task<IActionResult> PutResult(ResultPayload resultPayload)
+		{
+			var isHashMatch = await _puzzleService.SaveResult(resultPayload);
+			if (isHashMatch)
+				return Ok();
+
+			return Unauthorized();
 		}
 	}
 }

@@ -1,16 +1,24 @@
-﻿using Phrazy.Shared.Models;
+﻿using System.Security.Cryptography;
+using Phrazy.Shared.Models;
+using System.Text;
+using System.Text.Json;
+using Phrazy.Server.Repositories;
 
 namespace Phrazy.Server.Services;
 
 public interface IPuzzleService
 {
 	Task<PuzzlePayload> GetPayloadForToday(string identifier);
+	Task<bool> SaveResult(ResultPayload resultPayload);
 }
 
 public class PuzzleService : IPuzzleService
 {
-	public PuzzleService()
+	private readonly IResultRepository _resultRepository;
+
+	public PuzzleService(IResultRepository resultRepository)
 	{
+		_resultRepository = resultRepository;
 	}
 
 	public async Task<PuzzlePayload> GetPayloadForToday(string identifier)
@@ -21,8 +29,7 @@ public class PuzzleService : IPuzzleService
 			"this aggression will not stand",
 			"i am not throwing away my shot",
 			"the red coats are coming",
-			"i'm addicted to you, don't you know that you're toxic?",
-			"do not judge a book by its cover",
+			"don't judge a book by its cover",
 			"teach an old dog new tricks",
 			"the best things in life are free",
 			"it's the most wonderful time of the year",
@@ -40,16 +47,39 @@ public class PuzzleService : IPuzzleService
 		var unencodedPuzzle = phrases[index];
 		var encodedPuzzle = EncodeString(unencodedPuzzle);
 		var payload = new PuzzlePayload();
-		payload.ID = "123abc";
-		payload.Date = DateTime.UtcNow.Date;
-		payload.Hash = "fhweufhe";
 		payload.Puzzle = encodedPuzzle;
+		payload.PuzzleID = unencodedPuzzle;
+		payload.Date = DateTime.UtcNow.Date;
+		var hash = GetHash(payload.PuzzleID, identifier);
+		payload.Hash = hash;
 		return payload;
 	}
 
 	private string EncodeString(string text)
 	{
-		var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(text);
-		return System.Convert.ToBase64String(plainTextBytes);
+		var plainTextBytes = Encoding.UTF8.GetBytes(text);
+		return Convert.ToBase64String(plainTextBytes);
+	}
+
+	private string GetHash(string puzzleID, string deviceID)
+	{
+		var combined = puzzleID + "batshitphrazy" + deviceID;
+		var input = Encoding.UTF8.GetBytes(combined);
+		using var sha256 = SHA256.Create();
+		var output = sha256.ComputeHash(input);
+		return Convert.ToBase64String(output);
+	}
+
+	public async Task<bool> SaveResult(ResultPayload resultPayload)
+	{
+		var hash = GetHash(resultPayload.PuzzleID, resultPayload.DeviceID);
+		if (hash == resultPayload.Hash)
+		{
+			var resultString = JsonSerializer.Serialize(resultPayload.Results);
+			await _resultRepository.SaveResult(resultPayload.DeviceID, resultPayload.PuzzleID, resultPayload.Results.Score, null, DateTime.UtcNow, resultPayload.Results.IsWin, resultString);
+			return true;
+		}
+
+		return false;
 	}
 }

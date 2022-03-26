@@ -2,6 +2,7 @@
 using System.Text;
 using System.Timers;
 using Phrazy.Client.Models;
+using Phrazy.Shared.Models;
 using Timer = System.Timers.Timer;
 
 namespace Phrazy.Client.Services
@@ -26,6 +27,7 @@ namespace Phrazy.Client.Services
     public class GameEngine : IGameEngine
     {
 	    private readonly IPuzzleService _puzzleService;
+	    private readonly IDeviceIDService _deviceIDService;
 
 	    public event Action? OnKeyPress;
         public event Action? OnSolveModeChange;
@@ -38,13 +40,16 @@ namespace Phrazy.Client.Services
 
         private readonly Timer _timer;
         private readonly Stopwatch _stopwatch;
+        private string? _deviceID;
+        private PuzzleDefinition? _puzzleDefinition;
         private const int TotalGameSeconds = 120;  // total starting seconds available
         private const int GuessTimePenalty = 5;    // seconds off per guess if using that rule
-        private const int UnusedLetterBonus = 10;
+        private const int UnusedLetterBonus = 10;  // points for every unused letter if using that rule
 
-        public GameEngine(IPuzzleService puzzleService)
+        public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService)
         {
 	        _puzzleService = puzzleService;
+	        _deviceIDService = deviceIDService;
 	        GameState = new GameState();
 	        _timer = new Timer(100);
             _timer.Enabled = true;
@@ -55,9 +60,11 @@ namespace Phrazy.Client.Services
 
         public async Task<List<List<PhraseLetterStateBox>>> Start()
         {
-	        var puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
+	        _deviceID = await _deviceIDService.GetDeviceID();
 
-            GameState.Phrase = puzzleDefinition.Puzzle;
+	        _puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
+
+            GameState.Phrase = _puzzleDefinition.Puzzle;
 
             // divy up the letters
             var wordsOfStateBoxes = new List<List<PhraseLetterStateBox>>();
@@ -117,6 +124,7 @@ namespace Phrazy.Client.Services
 	        _timer.Stop();
 	        _stopwatch.Stop();
 	        OnKeyPress?.Invoke();
+	        _puzzleService.SendResults(_deviceID!, _puzzleDefinition!.Hash, _puzzleDefinition.PuzzleID, GameState.Results);
         }
 
         public void ChooseLetter(string letter)

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Phrazy.Shared.Models;
 
 namespace Phrazy.Client.Models;
 
