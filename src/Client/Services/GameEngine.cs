@@ -86,7 +86,7 @@ namespace Phrazy.Client.Services
         private void UpdateClock(object? sender, ElapsedEventArgs e)
         {
 	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
-	        var remainingTime = secondsElapsed - TotalGameSeconds + GameState.SecondPenalty;
+	        var remainingTime = secondsElapsed - TotalGameSeconds; // + GameState.SecondPenalty;
 	        GameState.SecondsRemaining = -(int)remainingTime;
 	        if (GameState.SecondsRemaining <= 0)
 	        {
@@ -102,11 +102,13 @@ namespace Phrazy.Client.Services
 		        GameState.SecondsRemaining = 0;
 	        GameState.IsGameOver = true;
 	        var lettersUsed = GameState.GuessRecords.Count;
-	        GameState.Results = new Results
+	        var score = GameState.SecondsRemaining + ((26 - lettersUsed) * 5);
+
+            GameState.Results = new Results
 	        {
 		        IsWin = isWinner,
 		        LettersUsed = lettersUsed,
-                Score = isWinner?  GameState.SecondsRemaining : 0
+                Score = isWinner?  score : 0
 	        };
 	        GameState.IsGameOver = true;
 	        OpenDialog();
