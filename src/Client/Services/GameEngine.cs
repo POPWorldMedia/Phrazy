@@ -156,6 +156,13 @@ namespace Phrazy.Client.Services
                 return;
             }
 
+            if (letter == "enter")
+            {
+                if (!GameState.IsSolveMode)
+					ToggleSolveMode();
+	            return;
+            }
+
             if (!_stopwatch.IsRunning)
             {
                 _stopwatch.Start();
