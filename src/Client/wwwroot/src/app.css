@@ -139,6 +139,7 @@ header div:last-child {
 #dialog #rules {
     height: 100%;
     overflow-y: scroll;
+	padding: 0 1em;
 }
 
 #dialog #copyright {
