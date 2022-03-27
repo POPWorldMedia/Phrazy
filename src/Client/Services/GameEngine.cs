@@ -95,12 +95,13 @@ namespace Phrazy.Client.Services
         {
 	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
 	        var remainingTime = secondsElapsed - TotalGameSeconds; // + GameState.SecondPenalty;
-	        GameState.SecondsRemaining = -(int)remainingTime;
-	        if (GameState.SecondsRemaining <= 0)
-	        {
-		        GameState.SecondsRemaining = 0;
-                End(false);
-	        }
+	        GameState.SecondsRemaining = (int)secondsElapsed;
+	        //GameState.SecondsRemaining = -(int)remainingTime;
+	        //if (GameState.SecondsRemaining <= 0)
+	        //{
+		       // GameState.SecondsRemaining = 0;
+         //       End(false);
+	        //}
 	        OnTimeUpdated?.Invoke();
         }
 
@@ -110,7 +111,8 @@ namespace Phrazy.Client.Services
 		        GameState.SecondsRemaining = 0;
 	        GameState.IsGameOver = true;
 	        var lettersUsed = GameState.GuessRecords.Count;
-	        var score = GameState.SecondsRemaining + ((26 - lettersUsed) * UnusedLetterBonus);
+	        //var score = GameState.SecondsRemaining + ((26 - lettersUsed) * UnusedLetterBonus);
+	        var score = lettersUsed;
 
             GameState.Results = new Results
 	        {

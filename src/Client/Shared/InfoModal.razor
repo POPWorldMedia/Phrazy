@@ -19,13 +19,13 @@
                         <p>@_gameEngine.GameState.Results.LettersUsed</p>
                     </div>
 	                <div>
-		                <h3>Time Left</h3>
-		                <p>@_gameEngine.GameState.Results.SecondsLeft</p>
+		                <h3>Time</h3>
+		                <p>@TimeSpan.FromSeconds(_gameEngine.GameState.Results.SecondsLeft).ToString(@"mm\:ss")</p>
 	                </div>
-                    <div>
+                   @* <div>
                         <h3>Score</h3>
                         <p>@_gameEngine.GameState.Results.Score</p>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         }
