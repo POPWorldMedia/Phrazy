@@ -3,6 +3,7 @@
 html, body, #app {
     height: 100%;
     font-family: "Roboto","Helvetica Neue",Arial,"Noto Sans","Liberation Sans", sans-serif;
+	touch-action: manipulation;
 }
 
 @media (prefers-color-scheme: dark) {
