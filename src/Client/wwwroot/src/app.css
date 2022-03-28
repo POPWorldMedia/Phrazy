@@ -90,6 +90,7 @@ header div:last-child {
     animation-duration: .5s;
     animation-iteration-count: 1;
     animation-timing-function: ease-in-out;
+    -webkit-transform: translate3d(0,0,1px);
 }
 
 #dialog .key {
