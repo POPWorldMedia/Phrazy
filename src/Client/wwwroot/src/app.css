@@ -9,7 +9,7 @@
         scrollbar-color: dark;
     }
     #dialog > div {
-        background-color: #555;
+        background-color: #555 !important;
     }
     a, a:visited, a:hover {
 	    color: #ddd;
@@ -23,7 +23,7 @@
         scrollbar-color: light;
     }
     #dialog > div {
-        background-color: #ccc;
+        background-color: #ccc !important;
     }
 	a, a:visited, a:hover {
 		color: #555;
