@@ -68,6 +68,7 @@ header div:last-child {
 
 #dialog > div {
     position: relative;
+    background-color: #ccc;
     border: #777777;
     width: 95%;
     max-width: 520px;
@@ -175,6 +176,7 @@ header div:last-child {
     width: 2em;
     height: 2.5em;
     margin-right: .2em;
+    z-index: 1;
 }
 
 .letter.focus {
