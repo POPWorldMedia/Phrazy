@@ -2,6 +2,7 @@
 	[DeviceID] [nvarchar](50) NOT NULL,
 	[PuzzleID] [nvarchar](50) NOT NULL,
 	[Score] [int] NOT NULL,
+	[Seconds] [int] NOT NULL,
 	[Rank] [int] NULL,
 	[TimeStamp] [datetime] NOT NULL,
 	[IsWin] [bit] NOT NULL,

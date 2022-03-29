@@ -89,7 +89,7 @@ public class PuzzleService : IPuzzleService
 		if (hash == resultPayload.Hash)
 		{
 			var resultString = JsonSerializer.Serialize(resultPayload.Results);
-			await _resultRepository.SaveResult(resultPayload.DeviceID, resultPayload.PuzzleID, resultPayload.Results.Score, null, DateTime.UtcNow, resultPayload.Results.IsWin, resultString);
+			await _resultRepository.SaveResult(resultPayload.DeviceID, resultPayload.PuzzleID, resultPayload.Results.Score, resultPayload.Results.Seconds, null, DateTime.UtcNow, resultPayload.Results.IsWin, resultString);
 			return true;
 		}
 

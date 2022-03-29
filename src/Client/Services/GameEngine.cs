@@ -94,12 +94,12 @@ namespace Phrazy.Client.Services
         private void UpdateClock(object? sender, ElapsedEventArgs e)
         {
 	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
-	        var remainingTime = secondsElapsed - TotalGameSeconds; // + GameState.SecondPenalty;
-	        GameState.SecondsRemaining = (int)secondsElapsed;
-	        //GameState.SecondsRemaining = -(int)remainingTime;
-	        //if (GameState.SecondsRemaining <= 0)
+	        //var remainingTime = secondsElapsed - TotalGameSeconds; // + GameState.SecondPenalty;
+	        GameState.Seconds = (int)secondsElapsed;
+	        //GameState.Seconds = -(int)remainingTime;
+	        //if (GameState.Seconds <= 0)
 	        //{
-		       // GameState.SecondsRemaining = 0;
+		       // GameState.Seconds = 0;
          //       End(false);
 	        //}
 	        OnTimeUpdated?.Invoke();
@@ -107,19 +107,19 @@ namespace Phrazy.Client.Services
 
         private void End(bool isWinner)
         {
-	        if (GameState.SecondsRemaining < 0)
-		        GameState.SecondsRemaining = 0;
+	        if (GameState.Seconds < 0)
+		        GameState.Seconds = 0;
 	        GameState.IsGameOver = true;
 	        var lettersUsed = GameState.GuessRecords.Count;
-	        //var score = GameState.SecondsRemaining + ((26 - lettersUsed) * UnusedLetterBonus);
+	        //var score = GameState.Seconds + ((26 - lettersUsed) * UnusedLetterBonus);
 	        var score = lettersUsed;
 
             GameState.Results = new Results
 	        {
 		        IsWin = isWinner,
 		        LettersUsed = lettersUsed,
-                Score = isWinner?  score : 0,
-                SecondsLeft = GameState.SecondsRemaining
+                Score = isWinner ? score : 0,
+                Seconds = GameState.Seconds
 	        };
 	        GameState.IsGameOver = true;
 	        OpenDialog();
