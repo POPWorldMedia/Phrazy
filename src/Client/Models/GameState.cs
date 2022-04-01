@@ -43,7 +43,7 @@ public class GameState
 	public bool IsSolveMode { get; set; }
 	public Results? Results { get; set; }
 	public bool IsGameOver { get; set; }
-	public DateTime StartTime { get; set; }
 	public int Seconds { get; set; }
-	public int SecondPenalty { get; set; }
+	public DateTime TimeStamp { get; set; }
+	public PuzzleDefinition? PuzzleDefinition { get; set; }
 }

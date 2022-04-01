@@ -29,6 +29,7 @@ namespace Phrazy.Client.Services
 	    private readonly IPuzzleService _puzzleService;
 	    private readonly IDeviceIDService _deviceIDService;
 	    private readonly IAlertService _alertService;
+	    private readonly IGameStatePersistenceService _gameStatePersistenceService;
 
 	    public event Action? OnKeyPress;
         public event Action? OnSolveModeChange;
@@ -37,18 +38,18 @@ namespace Phrazy.Client.Services
         public event Action? OnBoardLoad;
         public event Action? OnTimeUpdated;
 
-        public GameState GameState { get; }
+        public GameState GameState { get; private set; }
 
         private readonly Timer _timer;
         private readonly Stopwatch _stopwatch;
         private string? _deviceID;
-        private PuzzleDefinition? _puzzleDefinition;
 
-        public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService, IAlertService alertService)
+        public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService, IAlertService alertService, IGameStatePersistenceService gameStatePersistenceService)
         {
 	        _puzzleService = puzzleService;
 	        _deviceIDService = deviceIDService;
 	        _alertService = alertService;
+	        _gameStatePersistenceService = gameStatePersistenceService;
 	        GameState = new GameState();
 	        _timer = new Timer(250);
             _timer.Enabled = true;
@@ -61,8 +62,22 @@ namespace Phrazy.Client.Services
         {
 	        _deviceID = await _deviceIDService.GetDeviceID();
 
-	        _puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
-	        if (string.IsNullOrEmpty(_puzzleDefinition.Phrase))
+	        var currentPuzzle = await _puzzleService.GetCurrentPuzzle();
+
+	        var previousState = await _gameStatePersistenceService.Load();
+	        if (previousState != null && previousState.PuzzleDefinition?.PuzzleID == currentPuzzle.PuzzleID)
+	        {
+                // restore state
+                GameState = previousState;
+                GameState.Seconds = (GameState.TimeStamp - DateTime.UtcNow).Seconds;
+	        }
+	        else
+	        {
+                // new state
+		        GameState.PuzzleDefinition = currentPuzzle;
+	        }
+
+	        if (string.IsNullOrEmpty(GameState.PuzzleDefinition.Phrase))
 	        {
 		        await _alertService.PopAlert("We couldn't find a new puzzle.");
 		        GameState.IsGameOver = true;
@@ -70,7 +85,7 @@ namespace Phrazy.Client.Services
 		        return null;
 	        }
 
-            GameState.Phrase = _puzzleDefinition.Phrase;
+            GameState.Phrase = GameState.PuzzleDefinition.Phrase;
 
             // divy up the letters
             var wordsOfStateBoxes = new List<List<PhraseLetterStateBox>>();
@@ -101,6 +116,8 @@ namespace Phrazy.Client.Services
         {
 	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
 	        GameState.Seconds = (int)secondsElapsed;
+            if (_stopwatch.IsRunning)
+		        _gameStatePersistenceService.Save(GameState);
 	        OnTimeUpdated?.Invoke();
         }
 
@@ -124,7 +141,7 @@ namespace Phrazy.Client.Services
 	        _timer.Stop();
 	        _stopwatch.Stop();
 	        OnKeyPress?.Invoke();
-	        _puzzleService.SendResults(_deviceID!, _puzzleDefinition!.Hash, _puzzleDefinition.PuzzleID, GameState.Results);
+	        _puzzleService.SendResults(_deviceID!, GameState.PuzzleDefinition!.Hash, GameState.PuzzleDefinition!.PuzzleID, GameState.Results);
         }
 
         public void ChooseLetter(string letter)
@@ -163,6 +180,7 @@ namespace Phrazy.Client.Services
 
             if (!_stopwatch.IsRunning)
             {
+                GameState.TimeStamp = DateTime.UtcNow;
                 _stopwatch.Start();
                 _timer.Start();
             }
