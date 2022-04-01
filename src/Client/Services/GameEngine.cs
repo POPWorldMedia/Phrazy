@@ -17,7 +17,7 @@ namespace Phrazy.Client.Services
         
         GameState GameState { get; }
         void ChooseLetter(string letter);
-        Task<List<List<PhraseLetterStateBox>>> Start();
+        Task<List<List<PhraseLetterStateBox>>?> Start();
         void ToggleSolveMode();
         void SolveBackspace();
         void OpenDialog();
@@ -28,6 +28,7 @@ namespace Phrazy.Client.Services
     {
 	    private readonly IPuzzleService _puzzleService;
 	    private readonly IDeviceIDService _deviceIDService;
+	    private readonly IAlertService _alertService;
 
 	    public event Action? OnKeyPress;
         public event Action? OnSolveModeChange;
@@ -36,30 +37,38 @@ namespace Phrazy.Client.Services
         public event Action? OnBoardLoad;
         public event Action? OnTimeUpdated;
 
-        public GameState GameState { get; private set; }
+        public GameState GameState { get; }
 
         private readonly Timer _timer;
         private readonly Stopwatch _stopwatch;
         private string? _deviceID;
         private PuzzleDefinition? _puzzleDefinition;
 
-        public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService)
+        public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService, IAlertService alertService)
         {
 	        _puzzleService = puzzleService;
 	        _deviceIDService = deviceIDService;
+	        _alertService = alertService;
 	        GameState = new GameState();
-	        _timer = new Timer(100);
+	        _timer = new Timer(250);
             _timer.Enabled = true;
             _timer.AutoReset = true;
             _timer.Elapsed += UpdateClock;
 	        _stopwatch = new Stopwatch();
         }
 
-        public async Task<List<List<PhraseLetterStateBox>>> Start()
+        public async Task<List<List<PhraseLetterStateBox>>?> Start()
         {
 	        _deviceID = await _deviceIDService.GetDeviceID();
 
 	        _puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
+	        if (string.IsNullOrEmpty(_puzzleDefinition.Phrase))
+	        {
+		        await _alertService.PopAlert("We couldn't find a new puzzle.");
+		        GameState.IsGameOver = true;
+		        OnBoardLoad?.Invoke();
+		        return null;
+	        }
 
             GameState.Phrase = _puzzleDefinition.Phrase;
 

@@ -14,6 +14,7 @@ builder.Services.AddScoped<IGameEngine, GameEngine>();
 builder.Services.AddScoped<IPuzzleService, PuzzleService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<IDeviceIDService, DeviceIDService>();
+builder.Services.AddScoped<IAlertService, AlertService>();
 
 builder.Services.AddScoped<IPuzzleRepo, PuzzleRepo>();
 

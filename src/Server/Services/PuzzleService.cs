@@ -15,54 +15,30 @@ public interface IPuzzleService
 public class PuzzleService : IPuzzleService
 {
 	private readonly IResultRepository _resultRepository;
+	private readonly IPuzzleRepository _puzzleRepository;
 
-	public PuzzleService(IResultRepository resultRepository)
+	public PuzzleService(IResultRepository resultRepository, IPuzzleRepository puzzleRepository)
 	{
 		_resultRepository = resultRepository;
+		_puzzleRepository = puzzleRepository;
 	}
 
 	public async Task<PuzzlePayload> GetPayloadForToday(string identifier)
 	{
-		string[] phrases =
+		// TODO: adjust if you're not running in East data center
+		var date = DateTime.Now.Date;
+		if (DateTime.Now.TimeOfDay.Hours < 3)
+			date = date.AddDays(-1);
+		var payload = await _puzzleRepository.GetPuzzleByDate(date);
+		if (payload == null)
 		{
-			"too cool for school",
-			"immigrants, we get the job done",
-			"it takes one to know one",
-			"don't get bent out of shape",
-			"get in loser we're going shopping",
-			"don't put all your eggs in one basket",
-			"there's no crying in baseball!",
-			"may the force be with you, always",
-			"there's no place like home",
-			"the bend and snap, works every time",
-			"houston we have a problem",
-			"what's love got to do with it",
-			"smells like teen spirit",
-			"the hitchhiker's guide to the galaxy",
-			"shake it like a polaroid picture",
-			"the girl with the dragon tattoo",
-			"i want to hold your hand",
-			"this is not my beautiful wife",
-			"give me something to believe in",
-			"the hunt for red october",
-			"the best things in life are free",
-			"out of the frying pan and into the fire",
-			"when it rains it pours",
-			"between a rock and a hard place",
-			"we don't talk about bruno",
-			"curiosity killed the cat",
-			"don't cry over spilled milk",
-			"back to the drawing board",
-			"the pirates don't eat the tourists",
-			"if at first you don't succeed"
-		};
+			payload = new PuzzlePayload();
+			return payload;
+		}
 		var index = Random.Shared.Next(0, 17);
-		var unencodedPuzzle = phrases[index];
+		var unencodedPuzzle = payload.Phrase;
 		var encodedPuzzle = EncodeString(unencodedPuzzle);
-		var payload = new PuzzlePayload();
 		payload.Phrase = encodedPuzzle;
-		payload.PuzzleID = unencodedPuzzle;
-		payload.PlayDate = DateTime.UtcNow.Date;
 		var hash = GetHash(payload.PuzzleID, identifier);
 		payload.Hash = hash;
 		return payload;

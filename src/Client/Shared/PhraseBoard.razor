@@ -21,7 +21,9 @@
     protected override async Task OnInitializedAsync()
     {
 	    _gameEngine.OnBoardLoad += Load;
-        _words = await _gameEngine.Start();
+	    var words = await _gameEngine.Start();
+	    if (words != null)
+		    _words = words;
     }
 
 	private void Load()
