@@ -60,9 +60,9 @@ public class PuzzleService : IPuzzleService
 		var unencodedPuzzle = phrases[index];
 		var encodedPuzzle = EncodeString(unencodedPuzzle);
 		var payload = new PuzzlePayload();
-		payload.Puzzle = encodedPuzzle;
+		payload.Phrase = encodedPuzzle;
 		payload.PuzzleID = unencodedPuzzle;
-		payload.Date = DateTime.UtcNow.Date;
+		payload.PlayDate = DateTime.UtcNow.Date;
 		var hash = GetHash(payload.PuzzleID, identifier);
 		payload.Hash = hash;
 		return payload;

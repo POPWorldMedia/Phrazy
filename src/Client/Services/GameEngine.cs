@@ -42,9 +42,6 @@ namespace Phrazy.Client.Services
         private readonly Stopwatch _stopwatch;
         private string? _deviceID;
         private PuzzleDefinition? _puzzleDefinition;
-        private const int TotalGameSeconds = 120;  // total starting seconds available
-        private const int GuessTimePenalty = 5;    // seconds off per guess if using that rule
-        private const int UnusedLetterBonus = 10;  // points for every unused letter if using that rule
 
         public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService)
         {
@@ -64,7 +61,7 @@ namespace Phrazy.Client.Services
 
 	        _puzzleDefinition = await _puzzleService.GetCurrentPuzzle();
 
-            GameState.Phrase = _puzzleDefinition.Puzzle;
+            GameState.Phrase = _puzzleDefinition.Phrase;
 
             // divy up the letters
             var wordsOfStateBoxes = new List<List<PhraseLetterStateBox>>();
@@ -94,14 +91,7 @@ namespace Phrazy.Client.Services
         private void UpdateClock(object? sender, ElapsedEventArgs e)
         {
 	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
-	        //var remainingTime = secondsElapsed - TotalGameSeconds; // + GameState.SecondPenalty;
 	        GameState.Seconds = (int)secondsElapsed;
-	        //GameState.Seconds = -(int)remainingTime;
-	        //if (GameState.Seconds <= 0)
-	        //{
-		       // GameState.Seconds = 0;
-         //       End(false);
-	        //}
 	        OnTimeUpdated?.Invoke();
         }
 
@@ -111,7 +101,6 @@ namespace Phrazy.Client.Services
 		        GameState.Seconds = 0;
 	        GameState.IsGameOver = true;
 	        var lettersUsed = GameState.GuessRecords.Count;
-	        //var score = GameState.Seconds + ((26 - lettersUsed) * UnusedLetterBonus);
 	        var score = lettersUsed;
 
             GameState.Results = new Results
@@ -207,8 +196,6 @@ namespace Phrazy.Client.Services
                         hit = true;
                     }
                 }
-
-                GameState.SecondPenalty += GuessTimePenalty;
 
                 GameState.GuessRecords.Add(new GuessRecord {IsCorrect = hit, Letter = letter});
 

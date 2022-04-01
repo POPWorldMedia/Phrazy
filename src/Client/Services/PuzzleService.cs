@@ -25,11 +25,11 @@ public class PuzzleService : IPuzzleService
 	{
 		var identifier = await _deviceIDService.GetDeviceID();
 		var puzzlePayload = await _puzzleRepo.GetPuzzleWithIdentifier(identifier);
-		var base64EncodedBytes = Convert.FromBase64String(puzzlePayload.Puzzle);
+		var base64EncodedBytes = Convert.FromBase64String(puzzlePayload.Phrase);
 		var puzzle = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
 		var definition = new PuzzleDefinition
 		{
-			Puzzle = puzzle,
+			Phrase = puzzle,
 			PuzzleID = puzzlePayload.PuzzleID,
 			Hash = puzzlePayload.Hash
 		};
