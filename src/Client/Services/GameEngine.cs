@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using System.Timers;
 using Phrazy.Client.Models;
 using Phrazy.Shared.Models;
@@ -41,7 +40,6 @@ namespace Phrazy.Client.Services
         public GameState GameState { get; private set; }
 
         private readonly Timer _timer;
-        private readonly Stopwatch _stopwatch;
         private string? _deviceID;
 
         public GameEngine(IPuzzleService puzzleService, IDeviceIDService deviceIDService, IAlertService alertService, IGameStatePersistenceService gameStatePersistenceService)
@@ -52,10 +50,8 @@ namespace Phrazy.Client.Services
 	        _gameStatePersistenceService = gameStatePersistenceService;
 	        GameState = new GameState();
 	        _timer = new Timer(250);
-            _timer.Enabled = true;
             _timer.AutoReset = true;
             _timer.Elapsed += UpdateClock;
-	        _stopwatch = new Stopwatch();
         }
 
         public async Task<List<List<PhraseLetterStateBox>>?> Start()
@@ -64,20 +60,27 @@ namespace Phrazy.Client.Services
 
 	        var currentPuzzle = await _puzzleService.GetCurrentPuzzle();
 
+	        var isStateRestored = false;
 	        var previousState = await _gameStatePersistenceService.Load();
 	        if (previousState != null && previousState.PuzzleDefinition?.PuzzleID == currentPuzzle.PuzzleID)
 	        {
                 // restore state
+                isStateRestored = true;
                 GameState = previousState;
                 GameState.Seconds = (GameState.TimeStamp - DateTime.UtcNow).Seconds;
-	        }
+
+                if (!GameState.IsGameOver)
+                {
+	                _timer.Start();
+                }
+            }
 	        else
 	        {
                 // new state
 		        GameState.PuzzleDefinition = currentPuzzle;
 	        }
 
-	        if (string.IsNullOrEmpty(GameState.PuzzleDefinition.Phrase))
+	        if (string.IsNullOrEmpty(GameState.PuzzleDefinition?.Phrase))
 	        {
 		        await _alertService.PopAlert("We couldn't find a new puzzle.");
 		        GameState.IsGameOver = true;
@@ -90,6 +93,7 @@ namespace Phrazy.Client.Services
             // divy up the letters
             var wordsOfStateBoxes = new List<List<PhraseLetterStateBox>>();
             var words = GameState.Phrase.Split(' ');
+	        var index = 0;
             foreach (var word in words)
             {
                 var wordOfStateBoxes = new List<PhraseLetterStateBox>();
@@ -99,25 +103,28 @@ namespace Phrazy.Client.Services
                 foreach (var character in chars)
                 {
                     var initialState = array.Contains(character) ? PhraseLetterState.NotGuessed : PhraseLetterState.Special;
-                    var stateBox = new PhraseLetterStateBox
-                        {Letter = character.ToString(), PhraseLetterState = initialState};
+                    var stateBox = isStateRestored ?
+	                    previousState!.PhraseLetterStateBoxes[index]
+	                    : new PhraseLetterStateBox {Letter = character.ToString(), PhraseLetterState = initialState};
                     GameState.PhraseLetterStateBoxes.Add(stateBox);
                     wordOfStateBoxes.Add(stateBox);
+                    index++;
                 }
                 wordsOfStateBoxes.Add(wordOfStateBoxes);
             }
 
             OnBoardLoad?.Invoke();
+            OnKeyPress?.Invoke();
+            OnTimeUpdated?.Invoke();
 
             return wordsOfStateBoxes;
         }
 
         private void UpdateClock(object? sender, ElapsedEventArgs e)
         {
-	        var secondsElapsed = _stopwatch.Elapsed.TotalSeconds;
-	        GameState.Seconds = (int)secondsElapsed;
-            if (_stopwatch.IsRunning)
-		        _gameStatePersistenceService.Save(GameState);
+	        var elapsed = GameState.TimeStamp - DateTime.UtcNow;
+	        GameState.Seconds = (int)elapsed.TotalSeconds;
+            _gameStatePersistenceService.Save(GameState);
 	        OnTimeUpdated?.Invoke();
         }
 
@@ -139,7 +146,6 @@ namespace Phrazy.Client.Services
 	        GameState.IsGameOver = true;
 	        OpenDialog();
 	        _timer.Stop();
-	        _stopwatch.Stop();
 	        OnKeyPress?.Invoke();
 	        _puzzleService.SendResults(_deviceID!, GameState.PuzzleDefinition!.Hash, GameState.PuzzleDefinition!.PuzzleID, GameState.Results);
         }
@@ -178,10 +184,9 @@ namespace Phrazy.Client.Services
 	            return;
             }
 
-            if (!_stopwatch.IsRunning)
+            if (!_timer.Enabled)
             {
                 GameState.TimeStamp = DateTime.UtcNow;
-                _stopwatch.Start();
                 _timer.Start();
             }
 
