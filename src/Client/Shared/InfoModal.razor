@@ -47,7 +47,14 @@
     {
         _isOpen = true;
         _gameEngine.OnDialogOpen += Toggle;
+	    _gameEngine.OnBoardLoad += RefreshForResults;
     }
+
+	private void RefreshForResults()
+	{
+		_isShowResults = _gameEngine.GameState.Results != null;
+		StateHasChanged();
+	}
 
     private void Toggle(bool isOpen)
     {

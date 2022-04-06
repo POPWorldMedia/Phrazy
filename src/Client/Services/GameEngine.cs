@@ -143,11 +143,11 @@ namespace Phrazy.Client.Services
                 Score = isWinner ? score : 0,
                 Seconds = GameState.Seconds
 	        };
-	        GameState.IsGameOver = true;
 	        OpenDialog();
 	        _timer.Stop();
 	        OnKeyPress?.Invoke();
-	        _puzzleService.SendResults(_deviceID!, GameState.PuzzleDefinition!.Hash, GameState.PuzzleDefinition!.PuzzleID, GameState.Results);
+	        _gameStatePersistenceService.Save(GameState);
+            _puzzleService.SendResults(_deviceID!, GameState.PuzzleDefinition!.Hash, GameState.PuzzleDefinition!.PuzzleID, GameState.Results);
         }
 
         public void ChooseLetter(string letter)

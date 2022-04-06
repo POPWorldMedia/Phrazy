@@ -3,16 +3,18 @@
 	[PuzzleID] [nvarchar](50) NOT NULL,
 	[Score] [int] NOT NULL,
 	[Seconds] [int] NOT NULL,
+	[IsWin] [bit] NOT NULL,
 	[Rank] [int] NULL,
 	[TimeStamp] [datetime] NOT NULL,
-	[IsWin] [bit] NOT NULL,
 	[Results] [nvarchar](max) NOT NULL
 ) ON [PRIMARY]
 GO
 
 CREATE CLUSTERED INDEX [IX_Results_PuzzleID] ON [dbo].[Results]
 (
-	[PuzzleID] ASC
+	[PuzzleID] ASC,
+	[Score] ASC,
+	[Seconds] ASC
 )
 GO
 
