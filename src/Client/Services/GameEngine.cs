@@ -122,7 +122,7 @@ namespace Phrazy.Client.Services
 
         private void UpdateClock(object? sender, ElapsedEventArgs e)
         {
-	        var elapsed = GameState.TimeStamp - DateTime.UtcNow;
+	        var elapsed = DateTime.UtcNow - GameState.TimeStamp;
 	        GameState.Seconds = (int)elapsed.TotalSeconds;
             _gameStatePersistenceService.Save(GameState);
 	        OnTimeUpdated?.Invoke();
