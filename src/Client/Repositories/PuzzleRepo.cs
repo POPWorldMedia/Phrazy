@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
 using Phrazy.Shared;
 using Phrazy.Shared.Models;
 
@@ -8,7 +10,7 @@ public interface IPuzzleRepo
 {
 	Task<PuzzlePayload> GetPuzzleWithIdentifier(string id);
 	Task PutResults(ResultPayload resultPayload);
-	Task<LastResultPayload> GetLastResultWithIdentifier(string id);
+	Task<LastResultPayload?> GetLastResultWithIdentifier(string id);
 }
 
 public class PuzzleRepo : IPuzzleRepo
@@ -31,9 +33,13 @@ public class PuzzleRepo : IPuzzleRepo
 		await _httpClient.PutAsJsonAsync(ApiPaths.Puzzle.PutResult, resultPayload);
 	}
 
-	public async Task<LastResultPayload> GetLastResultWithIdentifier(string id)
+	public async Task<LastResultPayload?> GetLastResultWithIdentifier(string id)
 	{
-		var lastResultPayload = await _httpClient.GetFromJsonAsync<LastResultPayload>(ApiPaths.Puzzle.GetLastResult.Replace("{id}", id));
+		var result = await _httpClient.GetAsync(ApiPaths.Puzzle.GetLastResult.Replace("{id}", id));
+		if (result.StatusCode != HttpStatusCode.OK)
+			return null;
+		var payload = await result.Content.ReadAsStringAsync();
+		var lastResultPayload = JsonSerializer.Deserialize<LastResultPayload>(payload);
 		return lastResultPayload!;
 	}
 }
