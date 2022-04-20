@@ -25,7 +25,7 @@ public class PuzzleService : IPuzzleService
 	public async Task<PuzzleDefinition> GetCurrentPuzzle()
 	{
 		var identifier = await _deviceIDService.GetDeviceID();
-		var puzzlePayload = await _puzzleRepo.GetPuzzleWithIdentifier(identifier);
+		var puzzlePayload = await _puzzleRepo.GetPuzzleWithIdentifier(identifier, DateTime.Now.Date.Ticks);
 		if (string.IsNullOrEmpty(puzzlePayload.Phrase))
 			return new PuzzleDefinition();
 		var base64EncodedBytes = Convert.FromBase64String(puzzlePayload.Phrase);

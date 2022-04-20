@@ -8,7 +8,7 @@ namespace Phrazy.Server.Services;
 
 public interface IPuzzleService
 {
-	Task<PuzzlePayload> GetPayloadForToday(string identifier);
+	Task<PuzzlePayload> GetPayloadForToday(string identifier, DateTime date);
 	Task<bool> SaveResult(ResultPayload resultPayload);
 	Task<LastResultPayload> GetLastResultByDeviceID(string deviceID);
 }
@@ -24,19 +24,14 @@ public class PuzzleService : IPuzzleService
 		_puzzleRepository = puzzleRepository;
 	}
 
-	public async Task<PuzzlePayload> GetPayloadForToday(string identifier)
+	public async Task<PuzzlePayload> GetPayloadForToday(string identifier, DateTime date)
 	{
-		// TODO: adjust if you're not running in East data center
-		var date = DateTime.Now.Date;
-		if (DateTime.Now.TimeOfDay.Hours < 3)
-			date = date.AddDays(-1);
 		var payload = await _puzzleRepository.GetPuzzleByDate(date);
 		if (payload == null)
 		{
 			payload = new PuzzlePayload();
 			return payload;
 		}
-		var index = Random.Shared.Next(0, 17);
 		var unencodedPuzzle = payload.Phrase;
 		var encodedPuzzle = EncodeString(unencodedPuzzle);
 		payload.Phrase = encodedPuzzle;

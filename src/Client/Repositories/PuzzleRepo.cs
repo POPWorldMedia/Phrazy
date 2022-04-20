@@ -8,7 +8,7 @@ namespace Phrazy.Client.Repositories;
 
 public interface IPuzzleRepo
 {
-	Task<PuzzlePayload> GetPuzzleWithIdentifier(string id);
+	Task<PuzzlePayload> GetPuzzleWithIdentifier(string id, long ticks);
 	Task PutResults(ResultPayload resultPayload);
 	Task<LastResultPayload?> GetLastResultWithIdentifier(string id);
 }
@@ -22,9 +22,9 @@ public class PuzzleRepo : IPuzzleRepo
 		_httpClient = httpClient;
 	}
 
-	public async Task<PuzzlePayload> GetPuzzleWithIdentifier(string id)
+	public async Task<PuzzlePayload> GetPuzzleWithIdentifier(string id, long ticks)
 	{
-		var puzzlePayload = await _httpClient.GetFromJsonAsync<PuzzlePayload>(ApiPaths.Puzzle.GetWithIdentifier.Replace("{id}", id));
+		var puzzlePayload = await _httpClient.GetFromJsonAsync<PuzzlePayload>(ApiPaths.Puzzle.GetWithIdentifier.Replace("{id}", id) + $"?ticks={ticks}");
 		return puzzlePayload!;
 	}
 

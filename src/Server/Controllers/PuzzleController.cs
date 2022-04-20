@@ -16,9 +16,10 @@ namespace Phrazy.Server.Controllers
 		}
 
 		[HttpGet(ApiPaths.Puzzle.GetWithIdentifier)]
-		public async Task<PuzzlePayload> GetWithIdentifier(string id)
+		public async Task<PuzzlePayload> GetWithIdentifier(string id, [FromQuery]long ticks)
 		{
-			var payload = await _puzzleService.GetPayloadForToday(id);
+			var date = new DateTime(ticks);
+			var payload = await _puzzleService.GetPayloadForToday(id, date);
 			return payload;
 		}
 
