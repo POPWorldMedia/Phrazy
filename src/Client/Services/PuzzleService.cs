@@ -8,6 +8,7 @@ public interface IPuzzleService
 {
 	Task<PuzzleDefinition> GetCurrentPuzzle();
 	void SendResults(string deviceID, string hash, string puzzleID, Results results);
+	Task<LastResultPayload?> GetLastResult();
 }
 
 public class PuzzleService : IPuzzleService
@@ -24,7 +25,9 @@ public class PuzzleService : IPuzzleService
 	public async Task<PuzzleDefinition> GetCurrentPuzzle()
 	{
 		var identifier = await _deviceIDService.GetDeviceID();
-		var puzzlePayload = await _puzzleRepo.GetPuzzleWithIdentifier(identifier);
+		var puzzlePayload = await _puzzleRepo.GetPuzzleWithIdentifier(identifier, DateTime.Now.Date.Ticks);
+		if (string.IsNullOrEmpty(puzzlePayload.Phrase))
+			return new PuzzleDefinition();
 		var base64EncodedBytes = Convert.FromBase64String(puzzlePayload.Phrase);
 		var puzzle = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
 		var definition = new PuzzleDefinition
@@ -47,5 +50,12 @@ public class PuzzleService : IPuzzleService
 
 		};
 		await _puzzleRepo.PutResults(resultPayload);
+	}
+
+	public async Task<LastResultPayload?> GetLastResult()
+	{
+		var identifier = await _deviceIDService.GetDeviceID();
+		var lastResult = await _puzzleRepo.GetLastResultWithIdentifier(identifier);
+		return lastResult;
 	}
 }

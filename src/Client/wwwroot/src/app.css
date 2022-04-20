@@ -1,9 +1,12 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Condensed&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Condensed&family=Roboto+Slab&display=swap');
 
 html, body, #app {
     height: 100%;
     font-family: "Roboto","Helvetica Neue",Arial,"Noto Sans","Liberation Sans", sans-serif;
 	touch-action: manipulation;
+}
+h1, h2, h3, h4 {
+	font-family: "Roboto Slab",Georgia,"Times New Roman",serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -46,6 +49,7 @@ header div:first-child {
     width: 100%;
 	padding-left: .5em;
 	cursor: default;
+	font-family: "Roboto Slab",Georgia,"Times New Roman",serif;
 }
 header div:last-child {
 	display: flex;
@@ -157,18 +161,21 @@ header div:last-child {
     text-align: center;
 }
 
-#results #scores {
+.results ul {
+	list-style-type: none;
+}
+.results #scores {
     display: flex;
     justify-content: center;
 	z-index: 2000;
 }
-#results #scores div {
+.results #scores div {
     flex: 1;
     text-align: center;
 	font-size: 2em;
     font-weight: bold;
 }
-#results #solution {
+.results #solution {
 	text-transform: uppercase;
 	text-align: center;
 	background-color: green;

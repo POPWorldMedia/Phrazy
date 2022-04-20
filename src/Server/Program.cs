@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.ResponseCompression;
 using Phrazy.Server;
 using Phrazy.Server.Repositories;
 using Phrazy.Server.Services;
@@ -19,6 +18,7 @@ var services = builder.Services;
 services.AddTransient<IPuzzleService, PuzzleService>();
 
 services.AddTransient<IResultRepository, ResultRepository>();
+services.AddTransient<IPuzzleRepository, PuzzleRepository>();
 
 services.AddSingleton<IConfig, Config>();
 

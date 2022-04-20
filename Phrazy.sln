@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phrazy.Functions", "Phrazy.Functions\Phrazy.Functions.csproj", "{FCB0CC35-70C1-46C8-ADC4-95890CAA2EC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{2764FEF1-BA0C-4905-9EAA-11EDD7C179ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2764FEF1-BA0C-4905-9EAA-11EDD7C179ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2764FEF1-BA0C-4905-9EAA-11EDD7C179ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB0CC35-70C1-46C8-ADC4-95890CAA2EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB0CC35-70C1-46C8-ADC4-95890CAA2EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB0CC35-70C1-46C8-ADC4-95890CAA2EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB0CC35-70C1-46C8-ADC4-95890CAA2EC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
