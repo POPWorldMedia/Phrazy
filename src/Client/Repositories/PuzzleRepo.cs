@@ -8,6 +8,7 @@ public interface IPuzzleRepo
 {
 	Task<PuzzlePayload> GetPuzzleWithIdentifier(string id);
 	Task PutResults(ResultPayload resultPayload);
+	Task<LastResultPayload> GetLastResultWithIdentifier(string id);
 }
 
 public class PuzzleRepo : IPuzzleRepo
@@ -28,5 +29,11 @@ public class PuzzleRepo : IPuzzleRepo
 	public async Task PutResults(ResultPayload resultPayload)
 	{
 		await _httpClient.PutAsJsonAsync(ApiPaths.Puzzle.PutResult, resultPayload);
+	}
+
+	public async Task<LastResultPayload> GetLastResultWithIdentifier(string id)
+	{
+		var lastResultPayload = await _httpClient.GetFromJsonAsync<LastResultPayload>(ApiPaths.Puzzle.GetLastResult.Replace("{id}", id));
+		return lastResultPayload!;
 	}
 }

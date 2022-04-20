@@ -6,5 +6,6 @@ public static class ApiPaths
 	{
 		public const string GetWithIdentifier = "/api/puzzle/{id}";
 		public const string PutResult = "/api/result";
+		public const string GetLastResult = "/api/getlastresult/{id}";
 	}
 }

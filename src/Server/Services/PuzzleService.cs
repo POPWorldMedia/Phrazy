@@ -10,6 +10,7 @@ public interface IPuzzleService
 {
 	Task<PuzzlePayload> GetPayloadForToday(string identifier);
 	Task<bool> SaveResult(ResultPayload resultPayload);
+	Task<LastResultPayload> GetLastResultByDeviceID(string deviceID);
 }
 
 public class PuzzleService : IPuzzleService
@@ -70,5 +71,10 @@ public class PuzzleService : IPuzzleService
 		}
 
 		return false;
+	}
+
+	public async Task<LastResultPayload> GetLastResultByDeviceID(string deviceID)
+	{
+		return await _resultRepository.GetLastCalculatedResultByDeviceID(deviceID);
 	}
 }

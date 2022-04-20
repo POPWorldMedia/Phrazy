@@ -13,15 +13,16 @@ GO
 CREATE CLUSTERED INDEX [IX_Results_PuzzleID] ON [dbo].[Results]
 (
 	[PuzzleID] ASC,
+	[IsWin] DESC,
 	[Score] ASC,
 	[Seconds] ASC
 )
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Results_DeviceID_PuzzleID] ON [dbo].[Results]
+CREATE NONCLUSTERED INDEX [IX_Results_DeviceID_TimeStamp] ON [dbo].[Results]
 (
 	[DeviceID] ASC,
-	[PuzzleID] ASC
+	[TimeStamp] ASC
 )
 GO
 

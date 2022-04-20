@@ -1,5 +1,7 @@
 ﻿@using Phrazy.Client.Services
+@using Phrazy.Shared.Models
 @inject IGameEngine _gameEngine
+@inject IPuzzleService _puzzleService
 
 <div id="dialog" class="@(_isOpen ? "open" : "")">
     <div>
@@ -10,31 +12,45 @@
         </div>
         @if (_isShowResults && _gameEngine.GameState.Results != null)
         {
-            <div id="results">
-	            <h2>@(_gameEngine.GameState.Results.IsWin ? "You Win!" : "You Lose!")</h2>
-	            <div id="solution">@_gameEngine.GameState.Phrase</div>
-                <div id="scores">
-                    <div>
-                        <h3>Guesses</h3>
-                        <p>@_gameEngine.GameState.Results.LettersUsed</p>
-                    </div>
-	                <div>
-		                <h3>Time</h3>
-		                <p>@TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")</p>
-	                </div>
-                   @* <div>
-                        <h3>Score</h3>
-                        <p>@_gameEngine.GameState.Results.Score</p>
-                    </div>*@
-                </div>
-            </div>
+	        <div class="results">
+		        <h2>@(_gameEngine.GameState.Results.IsWin ? "You Win!" : "You Lose!")</h2>
+		        <div id="solution">@_gameEngine.GameState.Phrase</div>
+		        <div id="scores">
+			        <div>
+				        <h3>Guesses</h3>
+				        <p>@_gameEngine.GameState.Results.LettersUsed</p>
+			        </div>
+			        <div>
+				        <h3>Time</h3>
+				        <p>@TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")</p>
+			        </div>
+		        </div>
+	        </div>
+			<hr/>
         }
+        <div class="results">
+	        <h2>Last Available Rank</h2>
+	        @if (_lastResult == null)
+	        {
+		        <div id="solution">No previous result found</div>
+	        }
+	        else
+	        {
+		        <div id="solution">@_lastResult.Phrase</div>
+		        <ul>
+			        <li>Rank: @(_lastResult.Rank.ToString("N0")) / @_lastResult.UserCount.ToString("N0"), top @_percent</li>
+			        <li>Guesses: @_lastResult.Score, Time: @TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")</li>
+		        </ul>
+	        }
+        </div>
+        <hr/>
         <div id="rules">
             <h2>How To Play Phrazy</h2>
-            <p>Choose letters to guess the phrase. Press solve when you're ready to fill in the blanks. Try to solve with as few letters and as fast as possible! <span class="key">key</span> colors show a <span class="key hit">hit</span> or <span class="key miss">miss</span>. You lose if you pick every letter in the phrase, or the whole alphabet.</p>
+	        <p>Choose letters to guess the phrase. Press solve when you're ready to fill in the blanks. Try to solve with as few letters and as fast as possible for the best rank! <span class="key">key</span> colors show a <span class="key hit">hit</span> or <span class="key miss">miss</span>. You lose if you pick every letter in the phrase, or the whole alphabet.</p>
+	        <p>Your rank for the last game you played is usually updated by early morning (US).</p>
         </div>
         <div id="copyright">
-            <p>&copy;@DateTime.Now.Year, POP World Media, LLC - <a href="/privacy.html" target="_blank">Privacy Policy</a></p>
+            <p>&copy;@DateTime.Now.Year, POP World Media, LLC - <a href="/privacy.html" target="_blank">Privacy/Legal</a></p>
         </div>
     </div>
 </div>
@@ -42,6 +58,8 @@
 @code {
     private bool _isShowResults;
     private bool _isOpen;
+	private LastResultPayload? _lastResult;
+	private string _percent = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -53,6 +71,13 @@
 	private void RefreshForResults()
 	{
 		_isShowResults = _gameEngine.GameState.Results != null;
+	    _lastResult = _gameEngine.LastResultPayload;
+		if (_lastResult != null && _lastResult.Rank != 0 && _lastResult.UserCount != 0)
+		{
+			var percent = (double)_lastResult.Rank / _lastResult.UserCount;
+			if (percent < .01) percent = .01;
+			_percent = percent.ToString("P1");
+		}
 		StateHasChanged();
 	}
 
@@ -62,4 +87,10 @@
         _isShowResults = _gameEngine.GameState.Results != null;
         StateHasChanged();
     }
+
+	private void UpdateLastResult(LastResultPayload payload)
+	{
+		_lastResult = payload;
+		StateHasChanged();
+	}
 }

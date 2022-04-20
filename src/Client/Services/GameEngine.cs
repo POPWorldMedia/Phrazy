@@ -15,6 +15,8 @@ namespace Phrazy.Client.Services
         event Action? OnBoardLoad;
         
         GameState GameState { get; }
+        LastResultPayload? LastResultPayload { get; }
+
         void ChooseLetter(string letter);
         Task<List<List<PhraseLetterStateBox>>?> Start();
         void ToggleSolveMode();
@@ -38,6 +40,7 @@ namespace Phrazy.Client.Services
         public event Action? OnTimeUpdated;
 
         public GameState GameState { get; private set; }
+        public LastResultPayload? LastResultPayload { get; private set; }
 
         private readonly Timer _timer;
         private string? _deviceID;
@@ -49,6 +52,7 @@ namespace Phrazy.Client.Services
 	        _alertService = alertService;
 	        _gameStatePersistenceService = gameStatePersistenceService;
 	        GameState = new GameState();
+	        LastResultPayload = null;
 	        _timer = new Timer(250);
             _timer.AutoReset = true;
             _timer.Elapsed += UpdateClock;
@@ -112,6 +116,8 @@ namespace Phrazy.Client.Services
                 }
                 wordsOfStateBoxes.Add(wordOfStateBoxes);
             }
+
+            LastResultPayload = await _puzzleService.GetLastResult();
 
             OnBoardLoad?.Invoke();
             OnKeyPress?.Invoke();

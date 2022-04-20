@@ -31,5 +31,12 @@ namespace Phrazy.Server.Controllers
 
 			return Unauthorized();
 		}
+
+		[HttpGet(ApiPaths.Puzzle.GetLastResult)]
+		public async Task<LastResultPayload> GetLastResult(string id)
+		{
+			var result = await _puzzleService.GetLastResultByDeviceID(id);
+			return result;
+		}
 	}
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Phrazy.Functions": {
+      "commandName": "Project",
+      "commandLineArgs": "--verbose"
+    }
+  }
+}

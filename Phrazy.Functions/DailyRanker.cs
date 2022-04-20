@@ -12,11 +12,11 @@ namespace Phrazy.Functions
 	    private readonly IConfiguration _configuration;
 	    private readonly ILogger _logger;
 
-	    public DailyRanker(IConfiguration configuration, ILogger logger)
+	    public DailyRanker(IConfiguration configuration, ILoggerFactory loggerFactory)
 	    {
 		    _configuration = configuration;
-		    _logger = logger;
-	    }
+		    _logger = loggerFactory.CreateLogger<ManualRank>();
+        }
 
 	    [Function("DailyRanker")]
         public async Task Run([TimerTrigger("0 0 8 * * *")]TimerInfo timer)

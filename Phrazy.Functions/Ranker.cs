@@ -33,9 +33,9 @@ WHERE PuzzleID = @PuzzleID";
 		// run the rank
 		var rankQuery = @"WITH CTE AS
 (
-SELECT *, RANK() OVER (ORDER BY Score, Seconds) AS r
+SELECT *, RANK() OVER (ORDER BY IsWin DESC, Score, Seconds) AS r
 FROM Results
-WHERE PuzzleID = @PuzzleID AND IsWin = 1
+WHERE PuzzleID = @PuzzleID
 )
 UPDATE CTE
 SET [Rank] = r;";

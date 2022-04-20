@@ -8,6 +8,7 @@ public interface IPuzzleService
 {
 	Task<PuzzleDefinition> GetCurrentPuzzle();
 	void SendResults(string deviceID, string hash, string puzzleID, Results results);
+	Task<LastResultPayload> GetLastResult();
 }
 
 public class PuzzleService : IPuzzleService
@@ -49,5 +50,12 @@ public class PuzzleService : IPuzzleService
 
 		};
 		await _puzzleRepo.PutResults(resultPayload);
+	}
+
+	public async Task<LastResultPayload> GetLastResult()
+	{
+		var identifier = await _deviceIDService.GetDeviceID();
+		var lastResult = await _puzzleRepo.GetLastResultWithIdentifier(identifier);
+		return lastResult;
 	}
 }
