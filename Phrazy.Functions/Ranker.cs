@@ -24,6 +24,12 @@ public class Ranker
 			return;
 		}
 
+		// update number of players
+		var playerCountQuery = @"UPDATE Puzzles
+SET UserCount = (SELECT COUNT(PuzzleID) FROM Results WHERE PuzzleID = @PuzzleID)
+WHERE PuzzleID = @PuzzleID";
+		await connection.ExecuteAsync(playerCountQuery, new {PuzzleID = puzzleID});
+
 		// run the rank
 		var rankQuery = @"WITH CTE AS
 (
