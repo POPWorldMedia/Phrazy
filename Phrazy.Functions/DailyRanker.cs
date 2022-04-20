@@ -19,7 +19,7 @@ namespace Phrazy.Functions
 	    }
 
 	    [Function("DailyRanker")]
-        public async Task Run([TimerTrigger("0 0 5 * * *")]TimerInfo timer)
+        public async Task Run([TimerTrigger("0 0 8 * * *")]TimerInfo timer)
         {
 	        var stopwatch = new Stopwatch();
             stopwatch.Start();
