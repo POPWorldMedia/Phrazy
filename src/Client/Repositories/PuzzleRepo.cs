@@ -39,7 +39,8 @@ public class PuzzleRepo : IPuzzleRepo
 		if (result.StatusCode != HttpStatusCode.OK)
 			return null;
 		var payload = await result.Content.ReadAsStringAsync();
-		var lastResultPayload = JsonSerializer.Deserialize<LastResultPayload>(payload);
+		var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+		var lastResultPayload = JsonSerializer.Deserialize<LastResultPayload>(payload, options);
 		return lastResultPayload!;
 	}
 }
