@@ -34,13 +34,16 @@
 	        {
 		        <div id="solution">No previous result found</div>
 	        }
-	        else if (_lastResult.Phrase != Loading)
+	        else
 	        {
 		        <div id="solution">@_lastResult.Phrase</div>
-		        <ul>
-			        <li>Rank: @(_lastResult.Rank.ToString("N0")) / @_lastResult.UserCount.ToString("N0"), top @_percent</li>
-			        <li>Guesses: @_lastResult.Score, Time: @TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")</li>
-		        </ul>
+				@if (_lastResult.Phrase != Loading)
+				{
+					<ul>
+						<li>Rank: @(_lastResult.Rank.ToString("N0")) / @_lastResult.UserCount.ToString("N0"), top @_percent</li>
+						<li>Guesses: @_lastResult.Score, Time: @TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")</li>
+					</ul>
+				}
 	        }
         </div>
         <hr/>
