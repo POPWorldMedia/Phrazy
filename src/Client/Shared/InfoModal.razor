@@ -34,7 +34,7 @@
 	        {
 		        <div id="solution">No previous result found</div>
 	        }
-	        else
+	        else if (_lastResult.Phrase != Loading)
 	        {
 		        <div id="solution">@_lastResult.Phrase</div>
 		        <ul>
@@ -60,9 +60,12 @@
     private bool _isOpen;
 	private LastResultPayload? _lastResult;
 	private string _percent = string.Empty;
+	    
+	private const string Loading = "LOADING...";
 
     protected override void OnInitialized()
     {
+	    _lastResult = new LastResultPayload {Phrase = Loading};
         _isOpen = true;
         _gameEngine.OnDialogOpen += Toggle;
 	    _gameEngine.OnBoardLoad += RefreshForResults;
