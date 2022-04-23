@@ -4,16 +4,18 @@
 
 <div id="phraseBoard">
 
-    <Wrong></Wrong>
+	<Wrong></Wrong>
     
-    @if (_words != null)
-    {
-	    foreach (var word in _words)
-	    {
-		    <PhraseWord Word="@word"></PhraseWord>
-	    }
-    }
+	@if (_words != null)
+	{
+		foreach (var word in _words)
+		{
+			<PhraseWord Word="@word"></PhraseWord>
+		}
+	}
 </div>
+
+<CancelSolveButton></CancelSolveButton>
 
 @code {
     private List<List<PhraseLetterStateBox>> _words = null!;

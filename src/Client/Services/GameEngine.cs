@@ -120,6 +120,8 @@ namespace Phrazy.Client.Services
 
             LastResultPayload = await _puzzleService.GetLastResult();
 
+            if (isStateRestored)
+	            OnSolveModeChange?.Invoke();
             OnBoardLoad?.Invoke();
             OnKeyPress?.Invoke();
             OnTimeUpdated?.Invoke();
