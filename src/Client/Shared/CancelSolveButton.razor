@@ -17,13 +17,14 @@
 
 	protected override void OnInitialized()
 	{
-		_gameEngine.OnSolveModeChange += GameEngineOnOnSolveModeChange;
-		_visibility = _gameEngine.GameState.IsSolveMode ? "visible" : "hidden";
+		_gameEngine.OnKeyPress += UpdateVisibility;
+		_gameEngine.OnSolveModeChange += UpdateVisibility;
+		_visibility = _gameEngine.GameState.IsSolveMode && !_gameEngine.GameState.IsGameOver ? "visible" : "hidden";
 	}
 
-	private void GameEngineOnOnSolveModeChange()
+	private void UpdateVisibility()
 	{
-		_visibility = _gameEngine.GameState.IsSolveMode ? "visible" : "hidden";
+		_visibility = _gameEngine.GameState.IsSolveMode && !_gameEngine.GameState.IsGameOver ? "visible" : "hidden";
 		StateHasChanged();
 	}
 
