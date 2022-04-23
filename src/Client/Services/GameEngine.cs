@@ -110,7 +110,8 @@ namespace Phrazy.Client.Services
                     var stateBox = isStateRestored ?
 	                    previousState!.PhraseLetterStateBoxes[index]
 	                    : new PhraseLetterStateBox {Letter = character.ToString(), PhraseLetterState = initialState};
-                    GameState.PhraseLetterStateBoxes.Add(stateBox);
+                    if (!isStateRestored)
+	                    GameState.PhraseLetterStateBoxes.Add(stateBox);
                     wordOfStateBoxes.Add(stateBox);
                     index++;
                 }
