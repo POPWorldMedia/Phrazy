@@ -17,6 +17,19 @@
             const element = document.querySelector(id);
             element.focus();
         }
+        share = (url) => {
+	        if (navigator.share) {
+		        navigator.share({
+				        title: "Phrazy",
+				        url: url
+			        }).then(() => {
+				        console.log("Shared");
+			        })
+			        .catch(console.error);
+	        } else {
+		        // manual share
+	        }
+        }
     </script>
 </head>
 

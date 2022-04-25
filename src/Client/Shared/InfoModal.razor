@@ -127,7 +127,7 @@
 				s.Append("🟥");
 		}
 		var text = s.ToString();
-		await _jsRuntime.InvokeVoidAsync("alert", text);
+		await _jsRuntime.InvokeVoidAsync("share", text);
 	}
 
 	private async void ShareRank()
@@ -136,7 +136,7 @@
 			return;
 		var formattedDate = $"{_lastResult.TimeStamp.Month}/{_lastResult.TimeStamp.Day}";
 		var text = $"Phrazy.net {formattedDate}\r\n\"{_lastResult.Phrase.ToUpper()}\"\r\n❓{_lastResult.Score} ⏱️{TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")} Rank: {_lastResult.Rank.ToString("N0")}/{_lastResult.UserCount.ToString("N0")}, top {_percent}";
-		await _jsRuntime.InvokeVoidAsync("alert", text);
+		await _jsRuntime.InvokeVoidAsync("share", text);
 	}
 
 }
