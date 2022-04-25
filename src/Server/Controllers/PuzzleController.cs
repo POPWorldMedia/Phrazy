@@ -15,6 +15,12 @@ namespace Phrazy.Server.Controllers
 			_puzzleService = puzzleService;
 		}
 
+		[HttpGet("/api/test")]
+		public IActionResult Test()
+		{
+			return Ok();
+		}
+
 		[HttpGet(ApiPaths.Puzzle.GetWithIdentifier)]
 		public async Task<PuzzlePayload> GetWithIdentifier(string id, [FromQuery]long ticks)
 		{
