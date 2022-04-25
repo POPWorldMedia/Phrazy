@@ -312,6 +312,9 @@ header div:last-child {
 }
 
 @keyframes explode {
+    50% {
+	    transform: scale(2,2) rotate(-45deg);
+    }
     100% {
         transform: scale(1,1) rotate(0deg);
     }
@@ -336,7 +339,7 @@ header div:last-child {
     cursor: pointer;
     text-transform: uppercase;
     font-size: 1.4em;
-	font-family: "Roboto Condensed","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji", sans-serif;
+    font-family: "Roboto Condensed","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji", sans-serif;
     height: 2.5em;
     padding: 0;
     border-radius: .2em;
@@ -348,16 +351,19 @@ header div:last-child {
     margin: .1em;
     background-color: darkgray;
     color: black;
+	text-shadow: 0 1px 1px rgba(255, 255, 255,.45);
 }
 .key.Hit {
     color: white;
     background-color: green;
     cursor: default;
+    text-shadow: 0 1px 1px rgba(0, 0, 0,.45);
 }
 .key.Miss {
     color: white;
     background-color: darkred;
     cursor: default;
+    text-shadow: 0 1px 1px rgba(0, 0, 0,.45);
 }
 .halfKey {
     flex: 0.5;
@@ -391,8 +397,8 @@ header div:last-child {
 
 #cancelSolve {
     margin: 1em auto;
-	background-color: darkgray;
-	color: black;
+    background-color: darkgray;
+    color: black;
     border-radius: .2em;
     font-size: 1.5em;
     font-weight: bold;
@@ -403,6 +409,7 @@ header div:last-child {
     align-items: center;
     cursor: pointer;
     padding: 1em;
+	text-shadow: 0 1px 1px rgba(255, 255, 255,.45);
 }
 
 
