@@ -391,8 +391,8 @@ header div:last-child {
 
 #cancelSolve {
     margin: 1em auto;
-    color: white;
-    background-color: darkred;
+	background-color: darkgray;
+	color: black;
     border-radius: .2em;
     font-size: 1.5em;
     font-weight: bold;
@@ -401,8 +401,8 @@ header div:last-child {
     display: flex;
     justify-content: center;
     align-items: center;
-	cursor: pointer;
-	padding: 1em;
+    cursor: pointer;
+    padding: 1em;
 }
 
 
@@ -416,7 +416,7 @@ header div:last-child {
     font-size: 1.5em;
     font-weight: bold;
     left: calc(50% - 5em);
-    top: calc(50% - 1em);
+    top: calc(50% - 5em);
     width: 10em;
     height: 2em;
     display: flex;
