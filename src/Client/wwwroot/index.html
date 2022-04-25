@@ -17,11 +17,12 @@
             const element = document.querySelector(id);
             element.focus();
         }
-        share = (url) => {
+        share = (text) => {
 	        if (navigator.share) {
 		        navigator.share({
-				        title: "Phrazy",
-				        url: url
+	                    title: "Phrazy",
+	                    text: text,
+				        url: "https://phrazy.net/"
 			        }).then(() => {
 				        console.log("Shared");
 			        })
