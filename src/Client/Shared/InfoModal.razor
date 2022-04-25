@@ -18,11 +18,11 @@
 		        <div id="scores">
 			        <div>
 				        <h3>Guesses</h3>
-				        <p>@_gameEngine.GameState.Results.LettersUsed</p>
+				        <p>❓@_gameEngine.GameState.Results.LettersUsed</p>
 			        </div>
 			        <div>
 				        <h3>Time</h3>
-				        <p>@TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")</p>
+				        <p>⏱️@TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")</p>
 			        </div>
 		        </div>
 	        </div>
@@ -39,10 +39,7 @@
 		        <div id="solution">@_lastResult.Phrase</div>
 				@if (_lastResult.Phrase != Loading)
 				{
-					<ul>
-						<li>Rank: @(_lastResult.Rank.ToString("N0")) / @_lastResult.UserCount.ToString("N0"), top @_percent</li>
-						<li>Guesses: @_lastResult.Score, Time: @TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")</li>
-					</ul>
+					<p class="text-center">❓@_lastResult.Score ⏱️@TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss") Rank: @(_lastResult.Rank.ToString("N0")) / @_lastResult.UserCount.ToString("N0"), top @_percent</p>
 				}
 	        }
         </div>

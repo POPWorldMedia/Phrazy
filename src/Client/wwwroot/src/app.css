@@ -172,17 +172,17 @@ header div:last-child {
 .results #scores div {
     flex: 1;
     text-align: center;
-	font-size: 2em;
+	font-size: 1.7em;
     font-weight: bold;
 }
 .results #solution {
-	text-transform: uppercase;
-	text-align: center;
-	background-color: green;
-	color: white;
-	padding: 0.5em;
-	border-radius: 0.2em;
-	margin: 0.5em auto;
+    text-transform: uppercase;
+    text-align: center;
+	background-color: darkgray;
+	color: black;
+    padding: 0.5em;
+    border-radius: 0.2em;
+    margin: 0.5em auto;
 }
 
 
