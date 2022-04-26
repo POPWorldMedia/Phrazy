@@ -3,6 +3,3 @@
 async function onInstall(event) {
 	self.skipWaiting();
 }
-
-self.addEventListener('fetch', event => {
-});
