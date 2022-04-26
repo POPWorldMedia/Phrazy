@@ -7,6 +7,8 @@
     <meta name="description" content="Phrazy is a daily phrase and word puzzle." />
     <meta name="keywords" content="word game, words, web game, guessing game, puzzle" />
     <meta property="og:image" content="https://phrazy.net/social.jpg">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple.png">
     <title>Phrazy</title>
     <base href="/" />
     <link rel="canonical" href="https://phrazy.net/" />
@@ -18,18 +20,11 @@
             element.focus();
         }
         share = (text) => {
-	        if (navigator.share) {
-		        navigator.share({
-	                    title: "Phrazy",
-	                    text: text,
-				        url: "https://phrazy.net/"
-			        }).then(() => {
-				        console.log("Shared");
-			        })
-			        .catch(console.error);
-	        } else {
-		        // manual share
-	        }
+	        navigator.clipboard.writeText(text).then(function () {
+		        alert("Share copied to clipboard");
+	        }, function(err) {
+		        alert("Couldn't copy text to clipboard", err);
+	        });
         }
     </script>
 </head>
