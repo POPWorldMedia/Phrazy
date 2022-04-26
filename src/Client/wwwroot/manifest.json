@@ -1,0 +1,16 @@
+{
+	"name": "Phrazy",
+	"version": "0.99",
+	"short_name": "Phrazy",
+	"start_url": "./",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#00ff00",
+	"icons": [
+		{
+			"src": "phrazyicon.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
+}
