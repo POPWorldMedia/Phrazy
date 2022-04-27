@@ -1,6 +1,6 @@
 {
 	"name": "Phrazy",
-	"version": "0.99",
+	"version": "0.99.0.0",
 	"short_name": "Phrazy",
 	"start_url": "./",
 	"display": "standalone",
