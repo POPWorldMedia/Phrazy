@@ -17,7 +17,7 @@ namespace Phrazy.Client.Services
         GameState GameState { get; }
         LastResultPayload? LastResultPayload { get; }
 
-        Task ChooseLetter(string letter);
+        void ChooseLetter(string letter);
         Task<List<List<PhraseLetterStateBox>>?> Start();
         void ToggleSolveMode();
         void SolveBackspace();
@@ -159,7 +159,7 @@ namespace Phrazy.Client.Services
             _puzzleService.SendResults(_deviceID!, GameState.PuzzleDefinition!.Hash, GameState.PuzzleDefinition!.PuzzleID, GameState.Results);
         }
 
-        public async Task ChooseLetter(string letter)
+        public void ChooseLetter(string letter)
         {
             if (GameState.IsGameOver)
                 return;
@@ -214,11 +214,11 @@ namespace Phrazy.Client.Services
                         if (letterToFocus != null)
                             letterToFocus.IsFocus = true;
                         else
-                            await SolveCheck();
+                            SolveCheck();
                     }
                 }
                 else
-                    await SolveCheck();
+                    SolveCheck();
 
                 OnKeyPress?.Invoke();
             }
@@ -263,7 +263,7 @@ namespace Phrazy.Client.Services
             }
         }
 
-        private async Task SolveCheck()
+        private void SolveCheck()
         {
             var solveAttempt = new StringBuilder();
             foreach (var item in GameState.PhraseLetterStateBoxes)
@@ -278,20 +278,6 @@ namespace Phrazy.Client.Services
             if (scrubbedPhrase == solveAttempt.ToString())
             {
                 // correct you win
-                var lettersInSolveMode = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.Solve).ToList();
-                foreach (var item in lettersInSolveMode)
-                {
-	                item.Letter = item.SolveLetter;
-	                item.PhraseLetterState = PhraseLetterState.Won;
-                }
-                OnKeyPress?.Invoke();
-                await Task.Delay(301);
-                foreach (var item in lettersInSolveMode)
-                {
-	                item.PhraseLetterState = PhraseLetterState.Solve;
-                }
-                OnKeyPress?.Invoke();
-                await Task.Delay(401);
                 End(true);
                 return;
             }

@@ -13,6 +13,5 @@ public enum PhraseLetterState
     NotGuessed,
     Guessed,
     Special,
-    Solve,
-    Won
+    Solve
 }

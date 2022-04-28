@@ -21,7 +21,7 @@
     private async Task Click()
     {
         await _jsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
-        await _gameEngine.ChooseLetter(Letter);
+        _gameEngine.ChooseLetter(Letter);
     }
 
 }
