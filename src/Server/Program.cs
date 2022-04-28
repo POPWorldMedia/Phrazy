@@ -21,6 +21,7 @@ services.AddTransient<IResultRepository, ResultRepository>();
 services.AddTransient<IPuzzleRepository, PuzzleRepository>();
 
 services.AddSingleton<IConfig, Config>();
+services.AddSingleton<ICacheHelper, CacheHelper>();
 
 var app = builder.Build();
 

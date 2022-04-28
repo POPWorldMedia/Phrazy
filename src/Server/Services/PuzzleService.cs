@@ -26,17 +26,17 @@ public class PuzzleService : IPuzzleService
 
 	public async Task<PuzzlePayload> GetPayloadForToday(string identifier, DateTime date)
 	{
-		var payload = await _puzzleRepository.GetPuzzleByDate(date);
-		if (payload == null)
-		{
-			payload = new PuzzlePayload();
-			return payload;
-		}
-		var unencodedPuzzle = payload.Phrase;
+		var record = await _puzzleRepository.GetPuzzleByDate(date);
+		if (record == null)
+			return new PuzzlePayload();
+		var payload = new PuzzlePayload();
+		var unencodedPuzzle = record.Phrase;
 		var encodedPuzzle = EncodeString(unencodedPuzzle);
 		payload.Phrase = encodedPuzzle;
 		var hash = GetHash(payload.PuzzleID, identifier);
 		payload.Hash = hash;
+		payload.PuzzleID = record.PuzzleID;
+		payload.PlayDate = record.PlayDate;
 		return payload;
 	}
 
