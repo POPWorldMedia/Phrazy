@@ -10,7 +10,8 @@ var targetPath = "./wwwroot/lib/";
 
 gulp.task("copies", function () {
     var streams = [
-        gulp.src(nodeRoot + "bootstrap/dist/**/*").pipe(gulp.dest(targetPath + "/bootstrap/dist"))
+        gulp.src(nodeRoot + "bootstrap/dist/**/*").pipe(gulp.dest(targetPath + "/bootstrap/dist")),
+        gulp.src("./wwwroot/src/**/*").pipe(gulp.dest(targetPath + "/phrazy/dist"))
     ];
     return merge(streams);
 });

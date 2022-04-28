@@ -27,11 +27,7 @@
                 alert("Couldn't copy text to clipboard", err);
             });
         }
-        const broadcast = new BroadcastChannel("p");
-        broadcast.onmessage = (event) => {
-	        // trigger new data check
-	        console.log("sync received");
-        };
+
         if ('serviceWorker' in navigator) {
 	        window.addEventListener('load', function () {
 		        navigator.serviceWorker.register('sw.js').then(function (registration) {

@@ -185,10 +185,10 @@ header div:last-child {
     margin: 0.5em auto;
 }
 
-.share {
+.share, .share:hover {
 	margin: 0 auto;
 	background-color: green;
-	color: white;
+	color: white !important;
 	border-radius: .2em;
 	font-size: 1em;
 	font-weight: bold;
