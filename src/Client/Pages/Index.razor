@@ -36,11 +36,11 @@
     {
     }
 
-    private void HandleKey(KeyboardEventArgs e)
+    private async Task HandleKey(KeyboardEventArgs e)
     {
         if (Regex.IsMatch(e.Key, "^[a-zA-Z]{1}$") || e.Key == " " || e.Key.ToLower() == "backspace" || e.Key.ToLower() == "enter")
         {
-            _gameEngine.ChooseLetter(e.Key.ToLower());
+            await _gameEngine.ChooseLetter(e.Key.ToLower());
         }
     }
 
