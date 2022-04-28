@@ -21,11 +21,19 @@
             element.focus();
         }
         share = (text) => {
-            navigator.clipboard.writeText(text).then(function () {
-                alert("Share copied to clipboard");
-            }, function (err) {
-                alert("Couldn't copy text to clipboard", err);
-            });
+            const isMo = /Mobi/i.test(window.navigator.userAgent);
+            if (isMo && 'share' in navigator) {
+	            navigator.share({
+		            text: text
+	            });
+            } else {
+	            navigator.clipboard.writeText(text).then(function() {
+			            alert("Share copied to clipboard");
+		            },
+		            function(err) {
+			            alert("Couldn't copy text to clipboard", err);
+		            });
+            }
         }
 
         if ('serviceWorker' in navigator) {
