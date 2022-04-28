@@ -29,7 +29,7 @@
 		        </div>
 	        </div>
 	        <div class="text-center">
-		        <button class="share btn" @onclick="ShareToday">Share &nbsp;
+		        <button class="share btn" onclick="share('@GetShareToday()')">Share &nbsp;
 			        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
 				        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
 			        </svg>
@@ -51,7 +51,7 @@
 					<p class="text-center">❓@_lastResult.Score ⏱️@TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss") Rank: @(_lastResult.Rank.ToString("N0")) / @_lastResult.UserCount.ToString("N0"), top @_percent</p>
 				}
 		        <div class="text-center">
-			        <button class="btn share" @onclick="ShareRank">Share &nbsp;
+			        <button class="btn share" onclick="share('@GetShareRank()')">Share &nbsp;
 				        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
 					        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
 				        </svg>
@@ -113,12 +113,11 @@
 		StateHasChanged();
 	}
 
-	private async void ShareToday()
-	{
+	private string GetShareToday(){
 		if (_gameEngine.GameState.Results == null)
-			return;
+			return string.Empty;
 		var s = new StringBuilder();
-		s.Append($"Phrazy.net ❓{_gameEngine.GameState.Results.LettersUsed} ⏱️{TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")}\r\n");
+		s.Append($"Phrazy.net ❓{_gameEngine.GameState.Results.LettersUsed} ⏱️{TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")}\\n");
 		foreach (var guess in _gameEngine.GameState.GuessRecords)
 		{
 			if (guess.IsCorrect)
@@ -127,16 +126,15 @@
 				s.Append("🟥");
 		}
 		var text = s.ToString();
-		await _jsRuntime.InvokeVoidAsync("share", text);
+		return text;
 	}
 
-	private async void ShareRank()
+	private string GetShareRank()
 	{
 		if (_lastResult == null)
-			return;
+			return string.Empty;
 		var formattedDate = $"{_lastResult.TimeStamp.Month}/{_lastResult.TimeStamp.Day}";
-		var text = $"Phrazy.net {formattedDate}\r\n\"{_lastResult.Phrase.ToUpper()}\"\r\n❓{_lastResult.Score} ⏱️{TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")} Rank: {_lastResult.Rank.ToString("N0")}/{_lastResult.UserCount.ToString("N0")}, top {_percent}";
-		await _jsRuntime.InvokeVoidAsync("share", text);
+		var text = $"Phrazy.net {formattedDate}\\n\"{_lastResult.Phrase.ToUpper()}\"\\n❓{_lastResult.Score} ⏱️{TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")} Rank: {_lastResult.Rank.ToString("N0")}/{_lastResult.UserCount.ToString("N0")}, top {_percent}";
+		return text;
 	}
-
 }
