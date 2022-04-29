@@ -33,7 +33,7 @@ public class PuzzleService : IPuzzleService
 		var unencodedPuzzle = record.Phrase;
 		var encodedPuzzle = EncodeString(unencodedPuzzle);
 		payload.Phrase = encodedPuzzle;
-		var hash = GetHash(payload.PuzzleID, identifier);
+		var hash = GetHash(record.PuzzleID, identifier);
 		payload.Hash = hash;
 		payload.PuzzleID = record.PuzzleID;
 		payload.PlayDate = record.PlayDate;
