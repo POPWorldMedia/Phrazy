@@ -17,7 +17,7 @@ namespace Phrazy.Client.Services
         GameState GameState { get; }
         LastResultPayload? LastResultPayload { get; }
 
-        void ChooseLetter(string letter);
+        Task ChooseLetter(string letter);
         Task<List<List<PhraseLetterStateBox>>?> Start();
         void ToggleSolveMode();
         void SolveBackspace();
@@ -137,7 +137,7 @@ namespace Phrazy.Client.Services
 	        OnTimeUpdated?.Invoke();
         }
 
-        private void End(bool isWinner)
+        private async Task End(bool isWinner)
         {
 	        if (GameState.Seconds < 0)
 		        GameState.Seconds = 0;
@@ -152,14 +152,15 @@ namespace Phrazy.Client.Services
                 Score = isWinner ? score : 0,
                 Seconds = GameState.Seconds
 	        };
-	        OpenDialog();
 	        _timer.Stop();
 	        OnKeyPress?.Invoke();
-	        _gameStatePersistenceService.Save(GameState);
+	        await Task.Delay(2500);
+	        OpenDialog();
+	        await _gameStatePersistenceService.Save(GameState);
             _puzzleService.SendResults(_deviceID!, GameState.PuzzleDefinition!.Hash, GameState.PuzzleDefinition!.PuzzleID, GameState.Results);
         }
 
-        public void ChooseLetter(string letter)
+        public async Task ChooseLetter(string letter)
         {
             if (GameState.IsGameOver)
                 return;
@@ -214,11 +215,11 @@ namespace Phrazy.Client.Services
                         if (letterToFocus != null)
                             letterToFocus.IsFocus = true;
                         else
-                            SolveCheck();
+                            await SolveCheck();
                     }
                 }
                 else
-                    SolveCheck();
+                    await SolveCheck();
 
                 OnKeyPress?.Invoke();
             }
@@ -247,7 +248,7 @@ namespace Phrazy.Client.Services
                 if (!lettersRemaining.Any())
                 {
 	                UpdateClock(null, null!);
-	                End(false);
+	                await End(false);
 	                return;
                 }
 
@@ -255,7 +256,7 @@ namespace Phrazy.Client.Services
                 var notGuessed = GameState.PhraseLetterStateBoxes.Where(x => x.PhraseLetterState == PhraseLetterState.NotGuessed).ToList();
                 if (!notGuessed.Any())
                 {
-	                End(false);
+	                await End(false);
 	                return;
                 }
 
@@ -263,7 +264,7 @@ namespace Phrazy.Client.Services
             }
         }
 
-        private void SolveCheck()
+        private async Task SolveCheck()
         {
             var solveAttempt = new StringBuilder();
             foreach (var item in GameState.PhraseLetterStateBoxes)
@@ -278,7 +279,7 @@ namespace Phrazy.Client.Services
             if (scrubbedPhrase == solveAttempt.ToString())
             {
                 // correct you win
-                End(true);
+                await End(true);
                 return;
             }
             

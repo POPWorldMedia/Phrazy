@@ -1,8 +1,8 @@
 ﻿@page "/"
 @using Phrazy.Client.Services
 @using System.Text.RegularExpressions
-@inject IGameEngine _gameEngine
-@inject IJSRuntime _jsRuntime
+@inject IGameEngine GameEngine
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Phrazy</PageTitle>
 
@@ -22,6 +22,11 @@
     <InfoModal></InfoModal>
 
     <PhraseBoard></PhraseBoard>
+
+	<div id="messageRow">
+		<CancelSolveButton></CancelSolveButton>
+        <GameOver></GameOver>
+	</div>
     
 	<Timer></Timer>
 
@@ -36,23 +41,23 @@
     {
     }
 
-    private void HandleKey(KeyboardEventArgs e)
+    private async Task HandleKey(KeyboardEventArgs e)
     {
         if (Regex.IsMatch(e.Key, "^[a-zA-Z]{1}$") || e.Key == " " || e.Key.ToLower() == "backspace" || e.Key.ToLower() == "enter")
         {
-            _gameEngine.ChooseLetter(e.Key.ToLower());
+            await GameEngine.ChooseLetter(e.Key.ToLower());
         }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-            await _jsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
+            await JsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
     }
 
 	private void ClickInfo()
 	{
-		_gameEngine.OpenDialog();
+		GameEngine.OpenDialog();
 	}
 
 }

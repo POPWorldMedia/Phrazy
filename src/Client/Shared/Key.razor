@@ -1,9 +1,9 @@
 ﻿@using Phrazy.Client.Services
 @using Phrazy.Client.Models
-@inject IGameEngine _gameEngine
-@inject IJSRuntime _jsRuntime
+@inject IGameEngine GameEngine
+@inject IJSRuntime JsRuntime
 
-<button class="key @_gameEngine.GameState.KeyStates[Letter]" @onclick="Click">@Letter</button>
+<button class="key @GameEngine.GameState.KeyStates[Letter]" @onclick="Click" style="@(GameEngine.GameState.IsGameOver ? "cursor:default;" : "")">@Letter</button>
 
 @code {
     [Parameter]
@@ -11,7 +11,7 @@
 
     protected override void OnInitialized()
     {
-        _gameEngine.OnKeyPress += StateHasChanged;
+        GameEngine.OnKeyPress += StateHasChanged;
     }
 
     protected override void OnParametersSet()
@@ -20,8 +20,8 @@
 
     private async Task Click()
     {
-        await _jsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
-        _gameEngine.ChooseLetter(Letter);
+        await JsRuntime.InvokeVoidAsync("focusElement", "#gameContainer");
+        await GameEngine.ChooseLetter(Letter);
     }
 
 }

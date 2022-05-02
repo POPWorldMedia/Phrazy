@@ -1,0 +1,16 @@
+﻿@using Phrazy.Client.Services
+@inject IGameEngine GameEngine
+
+@if (GameEngine.GameState.IsGameOver && GameEngine.GameState.Results != null)
+{
+	<div id="gameOver">
+		<div>@(GameEngine.GameState.Results.IsWin ? "You win! 🏆" : "You lose 😢")</div>
+	</div>
+}
+
+@code {
+	protected override void OnInitialized()
+	{
+		GameEngine.OnKeyPress += StateHasChanged;
+	}
+}

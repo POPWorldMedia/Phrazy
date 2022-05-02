@@ -1,5 +1,5 @@
 ﻿@using Phrazy.Client.Services
-@inject IGameEngine _gameEngine
+@inject IGameEngine GameEngine
 
 <div id="keyboard">
 	<div>
@@ -41,32 +41,16 @@
 			<SolveBackKey></SolveBackKey>
 		</div>
 	</div>
-	@if (_isGameOver)
-	{
-		<div id="gameOver">
-			<div>GAME OVER</div>
-		</div>
-	}
 </div>
 
 @code {
-	private bool _isGameOver;
-
 	protected override void OnInitialized()
 	{
-		_gameEngine.OnKeyPress += SetGameOver;
-		_gameEngine.OnBoardLoad += Load;
+		GameEngine.OnBoardLoad += Load;
 	}
 
 	private void Load()
 	{
 		StateHasChanged();
 	}
-
-	private void SetGameOver()
-	{
-		_isGameOver = _gameEngine.GameState.IsGameOver;
-		StateHasChanged();
-	}
-
 }
