@@ -117,7 +117,7 @@
 		if (_gameEngine.GameState.Results == null)
 			return string.Empty;
 		var s = new StringBuilder();
-		s.Append($"Phrazy.net ❓{_gameEngine.GameState.Results.LettersUsed} ⏱️{TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")}\\n");
+		s.Append($"Phrazy.net {DateTime.Now.Month}/{DateTime.Now.Day} ❓{_gameEngine.GameState.Results.LettersUsed} ⏱️{TimeSpan.FromSeconds(_gameEngine.GameState.Results.Seconds).ToString(@"mm\:ss")}\\n");
 		foreach (var guess in _gameEngine.GameState.GuessRecords)
 		{
 			if (guess.IsCorrect)
