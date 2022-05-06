@@ -13,6 +13,7 @@ namespace Phrazy.Client.Services
         event Action? OnWrongSolve;
         event Action<bool>? OnDialogOpen;
         event Action? OnBoardLoad;
+        event Action? OnStartGame;
         
         GameState GameState { get; }
         LastResultPayload? LastResultPayload { get; }
@@ -38,6 +39,7 @@ namespace Phrazy.Client.Services
         public event Action<bool>? OnDialogOpen;
         public event Action? OnBoardLoad;
         public event Action? OnTimeUpdated;
+        public event Action? OnStartGame;
 
         public GameState GameState { get; private set; }
         public LastResultPayload? LastResultPayload { get; private set; }
@@ -196,8 +198,10 @@ namespace Phrazy.Client.Services
 
             if (!_timer.Enabled)
             {
+                // start of game
                 GameState.TimeStamp = DateTime.UtcNow;
                 _timer.Start();
+                OnStartGame?.Invoke();
             }
 
             if (GameState.IsSolveMode)

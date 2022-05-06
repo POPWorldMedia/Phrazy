@@ -396,21 +396,33 @@ header div:last-child {
 .solveKey {
     flex: 2;
 }
+.solveKeyFlash {
+    animation: flashSolve 3s ease-in-out;
+}
+@keyframes flashSolve {
+    0% { background-color: darkgray; }
+    16% { background-color: white; }
+    33% { background-color: #555555; }
+    50% { background-color: white; }
+    66% { background-color: #555555; }
+    83% { background-color: white; }
+    100% { background-color: darkgray; }
+}
 
 #gameOver {
-	margin: 0 auto;
-	background-color: darkgray;
-	color: black;
-	border-radius: .2em;
-	font-size: 1.5em;
-	font-weight: bold;
-	width: 90%;
-	height: 2em;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: default;
-	padding: 1em;
+    margin: 0 auto;
+    background-color: darkgray;
+    color: black;
+    border-radius: .2em;
+    font-size: 1.5em;
+    font-weight: bold;
+    width: 90%;
+    height: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+    padding: 1em;
     animation: overage 1s normal;
 }
 
