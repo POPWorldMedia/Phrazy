@@ -21,7 +21,7 @@
             element.focus();
         }
         share = (text) => {
-            const isMo = /Mobi/i.test(window.navigator.userAgent);
+            const isMo = /Mobi/i.test(window.navigator.userAgent) || /Android/.test(window.navigator.userAgent);
             if (isMo && 'share' in navigator) {
 	            navigator.share({
 		            text: text
