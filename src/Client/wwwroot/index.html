@@ -30,8 +30,11 @@
 	            navigator.clipboard.writeText(text).then(function() {
 			            alert("Share copied to clipboard");
 		            },
-		            function(err) {
-			            alert("Couldn't copy text to clipboard", err);
+                    function (err) {
+                        navigator.share({
+                            text: text
+                        })
+                            .catch((error) => alert("Couldn't copy text to clipboard", error));
 		            });
             }
         }
