@@ -133,7 +133,8 @@
 	{
 		if (_lastResult == null)
 			return string.Empty;
-		var formattedDate = $"{_lastResult.TimeStamp.Month}/{_lastResult.TimeStamp.Day}";
+	    var timeStamp = _lastResult.TimeStamp.ToLocalTime();
+		var formattedDate = $"{timeStamp.Month}/{timeStamp.Day}";
 		var text = $"Phrazy.net {formattedDate}\\n\"{_lastResult.Phrase.ToUpper()}\"\\n❓{_lastResult.Score} ⏱️{TimeSpan.FromSeconds(_lastResult.Seconds).ToString(@"mm\:ss")} Rank: {_lastResult.Rank.ToString("N0")}/{_lastResult.UserCount.ToString("N0")}, top {_percent}";
 		return text.Replace("'", "\\'");
 	}

@@ -87,8 +87,9 @@ namespace Phrazy.Client.Services
 	        }
 
 	        if (string.IsNullOrEmpty(GameState.PuzzleDefinition?.Phrase))
-	        {
-		        await _alertService.PopAlert("We couldn't find a new puzzle.");
+            {
+                LastResultPayload = await _puzzleService.GetLastResult();
+                await _alertService.PopAlert("We couldn't find a new puzzle.");
 		        GameState.IsGameOver = true;
 		        OnBoardLoad?.Invoke();
 		        return null;
