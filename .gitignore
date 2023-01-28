@@ -351,3 +351,4 @@ MigrationBackup/
 
 
 src/Client/wwwroot/lib
+.idea
