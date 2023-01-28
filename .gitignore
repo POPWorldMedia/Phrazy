@@ -352,3 +352,5 @@ MigrationBackup/
 
 src/Client/wwwroot/lib
 .idea
+src/Server/appsettings.Development.json
+.DS_Store
